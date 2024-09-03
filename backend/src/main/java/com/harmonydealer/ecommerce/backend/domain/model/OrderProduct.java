@@ -15,5 +15,4 @@ public class OrderProduct {
     public BigDecimal getTotalItem(){
         return this.price.multiply(quantity);
     }
-
 }
