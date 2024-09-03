@@ -2,13 +2,12 @@ package com.harmonydealer.ecommerce.backend.application;
 
 import com.harmonydealer.ecommerce.backend.domain.model.Product;
 import com.harmonydealer.ecommerce.backend.domain.port.IProductRepository;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class ProductService {
     private final IProductRepository iProductRepository;
 
-    public ProductService(IProductRepository iProductRepository) {
-        this.iProductRepository = iProductRepository;
-    }
 
     public Product save(Product product){
         return this.iProductRepository.save(product);

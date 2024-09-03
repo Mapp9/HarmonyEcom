@@ -2,13 +2,12 @@ package com.harmonydealer.ecommerce.backend.application;
 
 import com.harmonydealer.ecommerce.backend.domain.model.Category;
 import com.harmonydealer.ecommerce.backend.domain.port.ICategoryRepository;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class CategoryService {
     private final ICategoryRepository iCategoryRepository;
 
-    public CategoryService(ICategoryRepository iCategoryRepository) {
-        this.iCategoryRepository = iCategoryRepository;
-    }
     public Category save(Category category){
         return iCategoryRepository.save(category);
     }

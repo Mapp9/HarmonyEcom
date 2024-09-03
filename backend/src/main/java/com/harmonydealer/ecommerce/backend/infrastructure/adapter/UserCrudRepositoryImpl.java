@@ -3,17 +3,15 @@ package com.harmonydealer.ecommerce.backend.infrastructure.adapter;
 import com.harmonydealer.ecommerce.backend.domain.model.User;
 import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
 import com.harmonydealer.ecommerce.backend.infrastructure.mapper.UserMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+@AllArgsConstructor
 @Repository
 public class UserCrudRepositoryImpl implements IUserRepository {
     private final IUserCrudRepository iUserCrudRepository;
     private final UserMapper userMapper;
 
-    public UserCrudRepositoryImpl(IUserCrudRepository iUserCrudRepository, UserMapper userMapper) {
-        this.iUserCrudRepository = iUserCrudRepository;
-        this.userMapper = userMapper;
-    }
 
     @Override
     public User save(User user) {
