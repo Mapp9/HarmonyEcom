@@ -1,10 +1,13 @@
 package com.harmonydealer.ecommerce.backend.domain.model;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class Order {
 
     private Integer id;
