@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface IOrderCrudRepository extends CrudRepository<OrderEntity, Integer> {
     @Transactional
     @Modifying
-    @Query("UPDATE OrderEntity o SET o.state = :state WHERE o.id = :id")
+    @Query("UPDATE OrderEntity o SET o.orderState = :state WHERE o.id = :id")
     void updateStateById(Integer id, OrderState state);
 
     Iterable<OrderEntity> findByUserEntity(UserEntity userEntity);
