@@ -3,18 +3,15 @@ package com.harmonydealer.ecommerce.backend.infrastructure.adapter;
 import com.harmonydealer.ecommerce.backend.domain.model.Category;
 import com.harmonydealer.ecommerce.backend.domain.port.ICategoryRepository;
 import com.harmonydealer.ecommerce.backend.infrastructure.mapper.CategoryMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@AllArgsConstructor
 public class CategoryCrudRepositoryImpl implements ICategoryRepository {
 
     private final ICategoryCrudRepository iCategoryCrudRepository;
     private final CategoryMapper categoryMapper;
-
-    public CategoryCrudRepositoryImpl(ICategoryCrudRepository iCategoryCrudRepository, CategoryMapper categoryMapper) {
-        this.iCategoryCrudRepository = iCategoryCrudRepository;
-        this.categoryMapper = categoryMapper;
-    }
 
     @Override
     public Category save(Category category) {
@@ -35,6 +32,9 @@ public class CategoryCrudRepositoryImpl implements ICategoryRepository {
 
     @Override
     public void deleteById(Integer id) {
+        iCategoryCrudRepository.findById(id).orElseThrow(
+                ()-> new RuntimeException("Categoría con id: " + id + " no existe")
+        );
         iCategoryCrudRepository.deleteById(id);
     }
 }
