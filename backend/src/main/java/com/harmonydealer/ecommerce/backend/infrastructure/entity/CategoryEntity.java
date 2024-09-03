@@ -1,17 +1,18 @@
-package com.harmonydealer.ecommerce.backend.domain.model;
+package com.harmonydealer.ecommerce.backend.infrastructure.entity;
 
-
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "categories")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class Category {
-
+public class CategoryEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
     private LocalDateTime dateCreated;

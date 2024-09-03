@@ -1,9 +1,8 @@
-package com.harmonydealer.ecommerce.backend.infrastructure;
+package com.harmonydealer.ecommerce.backend.infrastructure.entity;
 
 import com.harmonydealer.ecommerce.backend.domain.model.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
