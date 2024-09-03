@@ -24,5 +24,5 @@ public class OrderEntity {
     @ManyToOne
     private UserEntity userEntity;
     @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.PERSIST)
-    private List<OrderProductEntity> productEntities;
+    private List<OrderProductEntity> orderProducts;
 }
