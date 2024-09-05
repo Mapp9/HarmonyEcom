@@ -1,1 +1,17 @@
 <p>home works!</p>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Precio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <th scope="row">{{p.id}}</th>
+        <td>{{p.name}}</td>
+        <td>{{p.price}}</td>
+      </tr>
+    </tbody>
+  </table>
