@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -17,11 +17,11 @@ export class ProductAddComponent implements OnInit{
   userId: string = '1';
   categoryId: string = '3';
 
-  constructor(private productService: ProductService, private router: Router) {
+  constructor(private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute) {
 
   }
   ngOnInit(): void {
-    
+    this.getProductById();
   }
 
   addProduct() {
@@ -37,10 +37,21 @@ export class ProductAddComponent implements OnInit{
     console.log(formData);
 
     this.productService.createProduct(formData).subscribe(
-      data => console.log(data)
+      data => {
+        console.log(data);
+        this.router.navigate(['admin/products']);
+      }
     );
-
-    this.router.navigate(['/admin/product']);
   }
 
+  getProductById(){
+    this.activatedRoute.params.subscribe(
+      prod => {
+        let id = prod['id'];
+        if(id){
+          console.log('el valor de la variable id es: ' + id);
+        }
+      }
+    );
+  }
 }
