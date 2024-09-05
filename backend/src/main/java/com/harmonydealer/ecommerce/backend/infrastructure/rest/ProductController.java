@@ -38,7 +38,6 @@ public class ProductController {
         product.setUserId(userId);
         product.setUrlImage(urlImage);
 
-
         log.info("Nombre producto: {}", product.getName());
         return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
     }
