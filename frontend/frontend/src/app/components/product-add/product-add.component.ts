@@ -50,6 +50,18 @@ export class ProductAddComponent implements OnInit{
         let id = prod['id'];
         if(id){
           console.log('el valor de la variable id es: ' + id);
+          this.productService.getProductById(id).subscribe(
+            data => {
+              this.id = data.id;
+              this.code = data.code;
+              this.name = data.name;
+              this.description = data.description;
+              this.urlImage = data.urlImage;
+              this.price = data.price;
+              this.userId = data.userId;
+              this.categoryId = data.userId;
+            }
+          );
         }
       }
     );
