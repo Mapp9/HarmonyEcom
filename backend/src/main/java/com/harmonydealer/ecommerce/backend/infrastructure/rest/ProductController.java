@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 @RestController
@@ -26,8 +28,9 @@ public class ProductController {
                                         @RequestParam("price")BigDecimal price,
                                         @RequestParam("urlImage")String urlImage,
                                         @RequestParam("userId") Integer userId,
-                                        @RequestParam("categoryId") Integer categoryId
-                                        ){
+                                        @RequestParam("categoryId") Integer categoryId,
+                                        @RequestParam(value = "image", required = false)MultipartFile multipartFile
+                                        ) throws IOException {
         Product product = new Product();
         product.setId(id);
         product.setCode(code);
@@ -39,7 +42,7 @@ public class ProductController {
         product.setUrlImage(urlImage);
 
         log.info("Nombre producto: {}", product.getName());
-        return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.save(product, multipartFile), HttpStatus.CREATED);
     }
     @GetMapping
     public ResponseEntity<Iterable<Product>> findAll(){
