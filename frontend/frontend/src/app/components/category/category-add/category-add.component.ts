@@ -16,6 +16,7 @@ export class CategoryAddComponent implements OnInit {
   constructor(private categoryService:CategoryService, private toastr:ToastrService, private router:Router, private activatedRoute:ActivatedRoute){}
 
   ngOnInit(): void {
+    this.getCategoryById();
   }
 
   addCategory(){
@@ -27,6 +28,23 @@ export class CategoryAddComponent implements OnInit {
         this.router.navigate(['admin/category']);
       }
     )
+  }
+
+  getCategoryById(){
+    this.activatedRoute.params.subscribe(
+      category =>{
+        let id = category['id'];
+        if(id){
+          console.log('Valor de la variable id: '+id)
+          this.categoryService.getCategoryById(id).subscribe(
+            data =>{
+              this.id = data.id;
+              this.name = data.name;
+            }
+          )
+        }
+      }
+    );
   }
 
 }

@@ -24,7 +24,7 @@
         <tbody *ngFor="let c of categories">
             <tr>
                 <td>{{c.name}}</td>                
-                <td><button class="btn btn-warning">Editar</button> </td>
+                <td><button class="btn btn-warning" [routerLink]="['/admin/category/update/', c.id]">Editar</button> </td>
                 <td><button class="btn btn-danger" >Eliminar</button>
             </tr>
         </tbody>
