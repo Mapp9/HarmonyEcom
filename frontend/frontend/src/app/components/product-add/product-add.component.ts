@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -19,7 +20,7 @@ export class ProductAddComponent implements OnInit{
 
   selectFile! : File;
 
-  constructor(private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService) {
 
   }
   ngOnInit(): void {
@@ -42,6 +43,12 @@ export class ProductAddComponent implements OnInit{
     this.productService.createProduct(formData).subscribe(
       data => {
         console.log(data);
+        if(this.id==0){
+          this.toastr.success('Producto registrado correctamente', 'Productos');
+        }else{
+          this.toastr.success('Producto editado correctamente', 'Productos');
+        }
+        
         this.router.navigate(['admin/product']);
       }
     );
