@@ -62,7 +62,7 @@ export class ProductAddComponent implements OnInit{
               this.urlImage = data.urlImage;
               this.price = data.price;
               this.userId = data.userId;
-              this.categoryId = data.userId;
+              this.categoryId = data.categoryId;
             }
           );
         }
