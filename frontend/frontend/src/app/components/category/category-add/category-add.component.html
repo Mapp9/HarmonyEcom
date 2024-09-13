@@ -17,13 +17,13 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="nombre">Nombre:</label>
             <div class="col-sm-10">
-                <input class="form-control" id="name" name="name"
+                <input [(ngModel)]="name" class="form-control" id="name" name="name"
                     placeholder="Ingrese el nombre de la categoría" autocomplete="off" minlength="5">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-2">
-                <button class="btn btn-success">
+                <button class="btn btn-success" (click)="addCategory()">
                     <span class="glyphicon glyphicon-saved"></span> Guardar
                 </button>
             </div>
