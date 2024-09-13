@@ -14,13 +14,16 @@ public class ProductService {
 
 
     public Product save(Product product, MultipartFile multipartFile) throws IOException {
+        //Verifica si el producto es nuevo o ya esta en la base de datos
         if (product.getId()!=0){
+            //Si multiparFile es igual a null quiere decir que el usuario no cargo una imagen
             if (multipartFile==null){
+                //Obtiene la url que ya tenia la imagen y la vuelve a setear
                 product.setUrlImage(product.getUrlImage());
-            }else {
+            }else{
                 product.setUrlImage(uploadFile.upload(multipartFile));
             }
-        }else {
+        }else{
             product.setUrlImage(uploadFile.upload(multipartFile));
         }
         return this.iProductRepository.save(product);
