@@ -20,10 +20,10 @@ public class ProductService {
             if (multipartFile==null){
                 product.setUrlImage(product.getUrlImage());
             }else{
-                String name = product.getUrlImage().substring(29);
-                log.info("Este es el nombre de la imagen: {}", name);
-                if(!name.equals("default.jpg")){
-                    uploadFile.delete(name);
+                String nameFile = product.getUrlImage().substring(29);
+                log.info("Este es el nombre de la imagen: {}", nameFile);
+                if(!nameFile.equals("default.jpg")){
+                    uploadFile.delete(nameFile);
                 }
                 product.setUrlImage(uploadFile.upload(multipartFile));
             }
@@ -40,10 +40,10 @@ public class ProductService {
     }
     public void deleteById(Integer id){
         Product product = findById(id);
-        String name = product.getUrlImage().substring(29);
-        log.info("Este es el Nombre de la imagen: {}", name);
-        if(!name.equals("default.jpg")){
-            uploadFile.delete(name);
+        String nameFile = product.getUrlImage().substring(29);
+        log.info("Este es el Nombre de la imagen: {}", nameFile);
+        if(!nameFile.equals("default.jpg")){
+            uploadFile.delete(nameFile);
         }
         this.iProductRepository.deleteById(id);
     }
