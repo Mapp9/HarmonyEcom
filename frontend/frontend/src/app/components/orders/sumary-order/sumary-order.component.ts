@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { DataPayment } from 'src/app/common/data-payment';
 import { ItemCart } from 'src/app/common/item-cart';
 import { Order } from 'src/app/common/order';
 import { OrderProduct } from 'src/app/common/order-product';
 import { OrderState } from 'src/app/common/order-state';
 import { CartService } from 'src/app/services/cart.service';
 import { OrderService } from 'src/app/services/order.service';
+import { PaymentService } from 'src/app/services/payment.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -23,7 +25,7 @@ export class SumaryOrderComponent implements OnInit {
   orderProducts :OrderProduct [] = [];
   userId : number = 1;
 
-  constructor(private cartService:CartService, private userService:UserService, private orderService:OrderService){}
+  constructor(private cartService:CartService, private userService:UserService, private orderService:OrderService, private paymentService:PaymentService){}
 
   ngOnInit(): void {
     this.items = this.cartService.convertToListFromMap();
@@ -48,6 +50,18 @@ export class SumaryOrderComponent implements OnInit {
         console.log('Orden creada con ID: '+ data.id);
       }
     );
+
+    let urlPayment;
+    let dataPayment = new DataPayment('PAYPAL', this.totalCart.toString(),'USD','COMPRA');
+
+    this.paymentService.getUrlPaypalPayment(dataPayment).subscribe(
+      data => {
+        urlPayment = data.url;
+        console.log('Respuesta exitosa...');
+        window.location.href = urlPayment;
+      }
+    );
+
 
   }
 
