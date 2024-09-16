@@ -58,7 +58,7 @@ public class PaypalController {
             log.info("Estado del pago: {}",payment.getState());
             if (payment.getState().equals("approved")){
                 log.info("Pago aprobado, redirigiendo al frontend");
-                return new RedirectView("http://localhost:4200");
+                return new RedirectView("http://localhost:4200/payment/success");
             }
         } catch (PayPalRESTException e) {
             log.error("Error al ejecutar el pago", e);
