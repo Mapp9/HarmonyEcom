@@ -5,11 +5,11 @@
   <h1 class="mt-4 mb-3">Harmony Dealer <small>Productos</small></h1>
 
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="">Home</a></li>
-    <li class="breadcrumb-item active">Crear Productos</li>
+    <li class="breadcrumb-item"><a routerLink="/admin/product">Productos</a></li>
+    <li class="breadcrumb-item active">{{pageTitle}}</li>
   </ol>
 
-  <h2>Crear Producto</h2>
+  <h2>{{pageTitle}}</h2>
   <form class="form-horizontal" (ngSubmit)="addProduct()" enctype="multipart/form-data">
     <input type="hidden" [(ngModel)]="id">
 

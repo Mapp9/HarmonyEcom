@@ -12,6 +12,7 @@ import { CategoryService } from 'src/app/services/category.service';
 export class CategoryAddComponent implements OnInit {
   id : number=0;
   name : string = '';
+  pageTitle: string = 'Crear Categoría'
 
   constructor(private categoryService:CategoryService, private toastr:ToastrService, private router:Router, private activatedRoute:ActivatedRoute){}
 
@@ -36,6 +37,7 @@ export class CategoryAddComponent implements OnInit {
         let id = category['id'];
         if(id){
           console.log('Valor de la variable id: '+id)
+          this.pageTitle = 'Editar Categoría'
           this.categoryService.getCategoryById(id).subscribe(
             data =>{
               this.id = data.id;

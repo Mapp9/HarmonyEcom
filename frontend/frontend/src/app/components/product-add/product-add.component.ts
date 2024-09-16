@@ -24,6 +24,8 @@ export class ProductAddComponent implements OnInit{
 
   categories : Category [] = [];
 
+  pageTitle: string = 'Crear Producto'
+
   constructor(private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private categoryService:CategoryService) {
 
   }
@@ -65,6 +67,7 @@ export class ProductAddComponent implements OnInit{
         let id = prod['id'];
         if(id){
           console.log('el valor de la variable id es: ' + id);
+          this.pageTitle = 'Editar Producto';
           this.productService.getProductById(id).subscribe(
             data => {
               this.id = data.id;
@@ -76,6 +79,7 @@ export class ProductAddComponent implements OnInit{
               this.userId = data.userId;
               this.categoryId = data.categoryId;
             }
+          
           );
         }
       }
