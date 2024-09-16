@@ -38,8 +38,8 @@ public class OrderController {
         return ResponseEntity.ok(orderService.findAll());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Order> findById(@PathVariable Integer id){
+    @GetMapping("/{variable}")
+    public ResponseEntity<Order> findById(@PathVariable("variable") Integer id){
         return ResponseEntity.ok(orderService.findById(id));
     }
 
