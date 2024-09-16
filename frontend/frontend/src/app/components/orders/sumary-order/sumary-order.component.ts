@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemCart } from 'src/app/common/item-cart';
+import { Order } from 'src/app/common/order';
+import { OrderProduct } from 'src/app/common/order-product';
+import { OrderState } from 'src/app/common/order-state';
 import { CartService } from 'src/app/services/cart.service';
+import { OrderService } from 'src/app/services/order.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -16,15 +20,34 @@ export class SumaryOrderComponent implements OnInit {
   lastName : string = '';
   email : string = '';
   address : string = '';
+  orderProducts:OrderProduct[]=[];
+  userId:number = 3;
 
-  constructor(private cartService:CartService, private userService:UserService){}
+  constructor(private cartService:CartService, private userService:UserService, private orderService:OrderService){}
 
   ngOnInit(): void {
     this.items = this.cartService.convertToListFromMap();
     this.totalCart = this.cartService.totalCart();
-    this.getUserById(2);
+    this.getUserById(this.userId);
   }
+  
 
+
+  generateOrder(){
+    this.items.forEach(
+      item =>{
+        let orderProduct = new OrderProduct(null, item.productId, item.quantity, item.price);
+        this.orderProducts.push(orderProduct);
+      }
+    );
+    let order = new Order(null, new Date(), this.orderProducts, this.userId, OrderState.CANCELLED);
+    this.orderService.createOrder(order).subscribe(
+      data => {
+        console.log('Orden creada con ID: '+ data.id)
+      }
+    );
+
+  }
 
   deleteItemCart(productId:number){
 this.cartService.deleteItemCart(productId);
