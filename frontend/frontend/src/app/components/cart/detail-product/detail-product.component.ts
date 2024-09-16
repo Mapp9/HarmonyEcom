@@ -30,6 +30,7 @@ export class DetailProductComponent implements OnInit {
         if(id){
           this.productService.getProductById(id).subscribe(
             data => {
+              this.id = data.id
               this.name = data.name;
               this.description = data.description;
               this.urlImage = data.urlImage;
