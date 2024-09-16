@@ -15,13 +15,13 @@ import { UserService } from 'src/app/services/user.service';
 export class SumaryOrderComponent implements OnInit {
 
   items : ItemCart [] = [];
-  totalCart: number = 0;
+  totalCart : number = 0;
   firstName : string = '';
   lastName : string = '';
   email : string = '';
   address : string = '';
-  orderProducts:OrderProduct[]=[];
-  userId:number = 3;
+  orderProducts :OrderProduct [] = [];
+  userId : number = 1;
 
   constructor(private cartService:CartService, private userService:UserService, private orderService:OrderService){}
 
@@ -40,10 +40,12 @@ export class SumaryOrderComponent implements OnInit {
         this.orderProducts.push(orderProduct);
       }
     );
+    
     let order = new Order(null, new Date(), this.orderProducts, this.userId, OrderState.CANCELLED);
+    console.log('Order: '+order.orderState);
     this.orderService.createOrder(order).subscribe(
       data => {
-        console.log('Orden creada con ID: '+ data.id)
+        console.log('Orden creada con ID: '+ data.id);
       }
     );
 

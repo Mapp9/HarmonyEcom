@@ -54,7 +54,7 @@ export class DetailProductComponent implements OnInit {
 
     this.cartService.addItemCart(item);
 
-    console.log("Total carrito: ");
+    console.log("Total carrito: "+this.cartService.totalCart());
     console.log(this.cartService.totalCart())
 
     this.toastr.success('Producto añadido al carrito de compras', 'Carrito compras');
