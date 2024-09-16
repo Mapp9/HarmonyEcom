@@ -1,6 +1,7 @@
 package com.harmonydealer.ecommerce.backend.infrastructure.rest;
 
 import com.harmonydealer.ecommerce.backend.domain.model.DataPayment;
+import com.harmonydealer.ecommerce.backend.domain.model.URLPaypalResponse;
 import com.harmonydealer.ecommerce.backend.infrastructure.service.PaypalService;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
@@ -19,7 +20,7 @@ public class PaypalController {
     private final String CANCEL_URL = "http://localhost:8085/api/v1/payments/cancel";
 
     @PostMapping
-    public String createPayment(@RequestBody DataPayment dataPayment){
+    public URLPaypalResponse createPayment(@RequestBody DataPayment dataPayment){
         try {
             Payment payment = paypalService.createPayment(
                     Double.valueOf(dataPayment.getAmount()),
@@ -32,14 +33,14 @@ public class PaypalController {
             );
             for (Links links : payment.getLinks()){
                 if (links.getRel().equals("approval_url")){
-                    return links.getHref();
+                    return new URLPaypalResponse(links.getHref()) ;
                 }
             }
         } catch (PayPalRESTException e) {
             e.printStackTrace();
         }
 
-        return "";
+        return new URLPaypalResponse("");
     }
 
     @GetMapping("/success")
