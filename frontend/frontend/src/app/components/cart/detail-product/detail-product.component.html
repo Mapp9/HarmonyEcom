@@ -6,7 +6,7 @@
 
     <!-- Page Heading/Breadcrumbs -->
     <h1 class="mt-4 mb-3">
-      Spring eCommerce <small>Producto</small>
+      Harmony Dealer <small class="badge bg-secondary">Productos</small>
     </h1>
 
     <ol class="breadcrumb">
@@ -28,7 +28,7 @@
               <h2 class="card-title">{{name}}</h2>
 
               <ul class="list-group">
-                <li class="list-group-item"><h5>Precio: {{price}}</h5></li>
+                <li class="list-group-item"><h5>Precio: {{price | currency:'USD':'symbol':'1.0-0'}}</h5></li>
                 <li class="list-group-item">
                   <p>Descripción: {{description}}</p>
                 </li>

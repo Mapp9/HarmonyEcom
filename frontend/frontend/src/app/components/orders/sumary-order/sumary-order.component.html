@@ -6,7 +6,7 @@
 
   <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">
-    Spring eCommerce <small>Resumen de la orden</small>
+    Harmony Dealer <small class="badge bg-secondary">Productos</small>
   </h1>
 
   <ol class="breadcrumb">
@@ -23,9 +23,9 @@
             <h5 class="card-title">
               DATOS ORDEN
             </h5>
-            <h6><strong> Nombre: </strong> </h6>
-            <h6><strong>Correo: </strong>  </h6>
-            <h6><strong> Dirección: </strong></h6>
+            <h6><strong> Nombre: </strong> {{firstName}} {{lastName}}</h6>
+            <h6><strong>Correo: </strong> {{email}} </h6>
+            <h6><strong> Dirección: </strong> {{address}}</h6>
 
             <h5 class="card-title">
               PRODUCTOS
@@ -59,7 +59,7 @@
 
           <ul class="list-group">
             <li class="list-group-item">
-              <h5> Total: </h5>
+              <h5> Total: {{totalCart | currency:'USD':'symbol':'1.0-0'}}</h5>
             </li>
             <a class="btn btn-dark">Pagar con Paypal</a>
           </ul>
