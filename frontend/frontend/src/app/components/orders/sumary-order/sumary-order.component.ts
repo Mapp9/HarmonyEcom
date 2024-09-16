@@ -7,6 +7,7 @@ import { OrderState } from 'src/app/common/order-state';
 import { CartService } from 'src/app/services/cart.service';
 import { OrderService } from 'src/app/services/order.service';
 import { PaymentService } from 'src/app/services/payment.service';
+import { SessionStorageService } from 'src/app/services/session-storage.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -28,7 +29,8 @@ export class SumaryOrderComponent implements OnInit {
   constructor(private cartService:CartService,
     private userService:UserService,
     private orderService:OrderService,
-    private paymentService:PaymentService
+    private paymentService:PaymentService,
+    private sessionStorage: SessionStorageService
     ){}
 
   ngOnInit(): void {
@@ -52,6 +54,7 @@ export class SumaryOrderComponent implements OnInit {
     this.orderService.createOrder(order).subscribe(
       data => {
         console.log('Orden creada con ID: '+ data.id);
+        this.sessionStorage.setItem('order',data);
       }
     );
 
