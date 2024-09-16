@@ -9,21 +9,21 @@ import { Observable } from 'rxjs';
 export class CategoryService {
 
   private apiUrl: string = 'http://localhost:8085/api/v1/admin/categories'
-  constructor(private http:HttpClient) { }
+  constructor(private httpClient:HttpClient) { }
 
   getCategoryList():Observable<Category[]>{
-    return this.http.get<Category[]>(this.apiUrl);
+    return this.httpClient.get<Category[]>(this.apiUrl);
   }
 
   createCategory(category:Category):Observable<Category>{
-    return this.http.post<Category>(this.apiUrl,category);
+    return this.httpClient.post<Category>(this.apiUrl,category);
   }
 
   deleteCategoryById(id:number):Observable<any>{
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.httpClient.delete(`${this.apiUrl}/${id}`);
   }
 
   getCategoryById(id:number):Observable<Category>{
-    return this.http.get<Category>(`${this.apiUrl}/${id}`);
+    return this.httpClient.get<Category>(`${this.apiUrl}/${id}`);
   }
 }
