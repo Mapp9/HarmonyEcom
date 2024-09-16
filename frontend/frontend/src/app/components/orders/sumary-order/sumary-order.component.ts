@@ -25,7 +25,11 @@ export class SumaryOrderComponent implements OnInit {
   orderProducts :OrderProduct [] = [];
   userId : number = 1;
 
-  constructor(private cartService:CartService, private userService:UserService, private orderService:OrderService, private paymentService:PaymentService){}
+  constructor(private cartService:CartService,
+    private userService:UserService,
+    private orderService:OrderService,
+    private paymentService:PaymentService
+    ){}
 
   ngOnInit(): void {
     this.items = this.cartService.convertToListFromMap();

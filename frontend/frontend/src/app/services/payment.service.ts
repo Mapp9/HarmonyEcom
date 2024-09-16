@@ -17,5 +17,5 @@ export class PaymentService {
     return this.httpClient.post<UrlPaypalResponse>(this.apiUrl, dataPayment);
   }
 
-  
+
 }
