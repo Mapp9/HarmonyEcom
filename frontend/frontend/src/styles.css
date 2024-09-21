@@ -6,7 +6,10 @@ body {
     padding-top: 56px;
   }
 
-
+.container{
+  padding-top: 3rem;
+  margin-top: 3rem;
+}
 
  .product-box img {
   width: 250px;
