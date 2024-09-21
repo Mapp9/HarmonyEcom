@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { DataPayment } from '../common/data-payment';
 import { Observable } from 'rxjs';
 import { UrlPaypalResponse } from '../common/url-paypal-response';
+import { HeaderService } from './header.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,11 @@ import { UrlPaypalResponse } from '../common/url-paypal-response';
 export class PaymentService {
   private apiUrl:string = 'http://localhost:8085/api/v1/payments';
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient, private headerService : HeaderService) { }
 
 
   getUrlPaypalPayment(dataPayment:DataPayment):Observable<UrlPaypalResponse>{
-    return this.httpClient.post<UrlPaypalResponse>(this.apiUrl, dataPayment);
+    return this.httpClient.post<UrlPaypalResponse>(this.apiUrl, dataPayment, {headers:this.headerService.headers});
   }
 
 

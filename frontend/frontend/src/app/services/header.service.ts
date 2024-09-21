@@ -10,7 +10,7 @@ export class HeaderService {
   private token = '';
   public headers : HttpHeaders = new HttpHeaders;
   constructor(private sessionStorage : SessionStorageService) {
-    this.token = sessionStorage.getItem('token').token;
+    this.token = this.sessionStorage.getItem('token').token;
 
     this.headers = new HttpHeaders(
       {
