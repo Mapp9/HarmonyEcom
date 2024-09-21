@@ -2,6 +2,7 @@ package com.harmonydealer.ecommerce.backend.infrastructure.rest;
 
 import com.harmonydealer.ecommerce.backend.application.UserService;
 import com.harmonydealer.ecommerce.backend.domain.model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,11 @@ public class UserController {
     @PostMapping
     public User save(@RequestBody User user){
         return userService.save(user);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<User>> findAll(){
+        return ResponseEntity.ok(userService.findAll());
     }
 
     @GetMapping("/{id}")

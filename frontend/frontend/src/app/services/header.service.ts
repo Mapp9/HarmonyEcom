@@ -14,7 +14,7 @@ export class HeaderService {
 
     this.headers = new HttpHeaders(
       {
-        'Content-Type' : 'application/json',
+        //'Content-Type' : 'application/json',
         'Authorization' : `${this.token}`
       }
     );
