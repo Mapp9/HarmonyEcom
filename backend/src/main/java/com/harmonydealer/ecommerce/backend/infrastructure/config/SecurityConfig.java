@@ -1,6 +1,7 @@
 package com.harmonydealer.ecommerce.backend.infrastructure.config;
 
 import com.harmonydealer.ecommerce.backend.infrastructure.jwt.JWTAuthorizationFilter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
     private final JWTAuthorizationFilter jwtAuthorizationFilter;
