@@ -1,6 +1,6 @@
 export class Jwtclient {
 
-    constructor(public token : string) {
+    constructor(public id : number, public token : string) {
 
     }
 }

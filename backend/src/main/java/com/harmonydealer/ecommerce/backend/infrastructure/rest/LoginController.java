@@ -1,6 +1,8 @@
 package com.harmonydealer.ecommerce.backend.infrastructure.rest;
 
 
+import com.harmonydealer.ecommerce.backend.application.UserService;
+import com.harmonydealer.ecommerce.backend.domain.model.User;
 import com.harmonydealer.ecommerce.backend.infrastructure.dto.JWTClient;
 import com.harmonydealer.ecommerce.backend.infrastructure.dto.UserDTO;
 import com.harmonydealer.ecommerce.backend.infrastructure.jwt.JWTGenerator;
@@ -21,10 +23,12 @@ public class LoginController {
 
     private final AuthenticationManager authenticationManager;
     private final JWTGenerator jwtGenerator;
+    private final UserService userService;
 
-    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator) {
+    public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.jwtGenerator = jwtGenerator;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -37,8 +41,10 @@ public class LoginController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("El role de usuario es: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
 
+        User user = userService.findByEmail(userDTO.username());
+
         String token = jwtGenerator.getToken(userDTO.username());
-        JWTClient jwtClient = new JWTClient(token);
+        JWTClient jwtClient = new JWTClient(user.getId(), token);
 
         return new ResponseEntity<>(jwtClient, HttpStatus.OK);
     }
