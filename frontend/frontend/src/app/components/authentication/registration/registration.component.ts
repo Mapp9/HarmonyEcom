@@ -38,6 +38,8 @@ export class RegistrationComponent implements OnInit {
       console.log(res)}
     );
     console.log("El usuario "+user.firstName+" ha sido registrado.");
+
+    this.router.navigate(['/user/login'])
   }
 
 }
