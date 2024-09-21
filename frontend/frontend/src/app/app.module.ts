@@ -18,7 +18,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { SumaryOrderComponent } from './components/orders/sumary-order/sumary-order.component';
 import { PaymentSuccessComponent } from './components/payment-success/payment-success.component';
 import { RegistrationComponent } from './components/authentication/registration/registration.component';
-import { LoginComponent } from './components/authentication/login/login.component'
+import { LoginComponent } from './components/authentication/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component'
 
 const routes : Routes = [
   {path: '', component: HomeComponent},
@@ -32,7 +33,9 @@ const routes : Routes = [
   {path: 'cart/sumary', component: SumaryOrderComponent},
   {path: 'payment/success', component: PaymentSuccessComponent},
   {path: 'user/register', component: RegistrationComponent},
-  {path: 'user/login', component: LoginComponent}
+  {path: 'user/login', component: LoginComponent},
+  {path: 'logout', component: LogoutComponent}
+
 ];
 
 @NgModule({
@@ -49,7 +52,8 @@ const routes : Routes = [
     SumaryOrderComponent,
     PaymentSuccessComponent,
     RegistrationComponent,
-    LoginComponent
+    LoginComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

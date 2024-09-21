@@ -10,13 +10,16 @@ export class HeaderService {
   private token = '';
   public headers : HttpHeaders = new HttpHeaders;
   constructor(private sessionStorage : SessionStorageService) {
-    this.token = this.sessionStorage.getItem('token').token;
-
-    this.headers = new HttpHeaders(
+    if(this.sessionStorage.getItem('token') != null){
+      console.log('HeadService: '+this.sessionStorage.getItem('token'));
+      this.token = this.sessionStorage.getItem('token').token;
+      this.headers = new HttpHeaders(
       {
         //'Content-Type' : 'application/json',
         'Authorization' : `${this.token}`
       }
     );
+    }
+    
    }
 }
