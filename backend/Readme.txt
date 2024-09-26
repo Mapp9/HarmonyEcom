@@ -1,143 +1,119 @@
->application
-    * UserService:
-        public class UserService {
-            private final IUserRepository iUserRepository;
+Código por casos de uso
 
-            public UserService(IUserRepository iUserRepository) {
-                this.iUserRepository = iUserRepository;
-            }
+Registrar un usuario
 
-            public User save(User user){
-                return this.iUserRepository.save(user);
-            }
-            public User findById(Integer id){
-                return this.iUserRepository.findById(id);
-            }
-        }
->domain
-    >model
-        *User:
-            @Data
-            @AllArgsConstructor
-            @NoArgsConstructor
-            public class User {
-                private Integer id;
-                private String username;
-                private String firstName;
-                private String lastName;
-                private String email;
-                private String address;
-                private String cellphone;
-                private String password;
-                private UserType userType;
-                private LocalDateTime dateCreated;
-                private LocalDateTime dateUpdated;
-            }
-        *UserType:
-            public enum UserType {
-                ADMIN, USER
-            }
-    >port
-        *IUserRepository:
-            public interface IUserRepository {
-                User save(User user);
-                User findByEmail(String email);
-                User findById(Integer id);
-            }
->infrastructure
-    >adapter
-        * IUserCrudRepository:
-            public interface IUserCrudRepository extends CrudRepository<UserEntity, Integer> {
-                        }
-        * UserCrudRepositoryImpl:
-            @Repository
-                        public class UserCrudRepositoryImpl implements IUserRepository {
-                            private final IUserCrudRepository iUserCrudRepository;
-                            private final UserMapper userMapper;
-                            public UserCrudRepositoryImpl(IUserCrudRepository iUserCrudRepository, UserMapper userMapper) {
-                                this.iUserCrudRepository = iUserCrudRepository;
-                                this.userMapper = userMapper;
-                            }
-                            @Override
-                            public User save(User user) {
-                                return userMapper.toUser(iUserCrudRepository.save(userMapper.toUserEntity(user)));
-                            }
-                            @Override
-                            public User findByEmail(String email) {
-                                return null;
-                            }
-    >config
-        * BeanConfiguration:
-            @Configuration
-            public class BeanConfiguration {
-                @Bean
-                public UserService userService(IUserRepository iUserRepository){
-                    return new UserService(iUserRepository);
-                }
-            }
-    >mapper
-        * UserMapper:
-            @Mapper(componentModel = "spring")
-            public interface UserMapper {
-                @Mappings(
-                        {
-                                @Mapping(source = "id", target = "id"),
-                                @Mapping(source = "username", target = "username"),
-                                @Mapping(source = "firstName", target = "firstName"),
-                                @Mapping(source = "lastName", target = "lastName"),
-                                @Mapping(source = "email", target = "email"),
-                                @Mapping(source = "address", target = "address"),
-                                @Mapping(source = "cellphone", target = "cellphone"),
-                                @Mapping(source = "password", target = "password"),
-                                @Mapping(source = "userType", target = "userType"),
-                                @Mapping(source = "dateCreated", target = "dateCreated"),
-                                @Mapping(source = "dateUpdated", target = "dateUpdated")
-                        }
-                )
-                User toUser(UserEntity userEntity);
-                Iterable<User> toUsers(Iterable<UserEntity> userEntities);
-                @InheritInverseConfiguration
-                UserEntity toUserEntity(User user);
-            }
-    >rest
-        * UserController:
-            @RestController
-            @RequestMapping("/api/v1/users")
-            public class UserController {
-                private final UserService userService;
-                public UserController(UserService userService) {
-                    this.userService = userService;
-                }
-                @PostMapping
-                public User save(@RequestBody User user){
-                    return userService.save(user);
-                }
-                @GetMapping("/{id}")
-                public User findById(@PathVariable Integer id){
-                    return userService.findById(id);
-                }
-            }
-    *UserEntity:
-        @Entity
-        @Table(name = "users")
-        @Data
-        @NoArgsConstructor
-        public class UserEntity {
-            @Id
-            @GeneratedValue(strategy = GenerationType.IDENTITY)
-            private Integer id;
-            private String username;
-            private String firstName;
-            private String lastName;
-            @Column(unique = true)
-            private String email;
-            private String address;
-            private String cellphone;
-            private String password;
-            @Enumerated(EnumType.STRING)
-            private UserType userType;
-            @CreationTimestamp
-            private LocalDateTime dateCreated;
-            @UpdateTimestamp
-            private LocalDateTime dateUpdated;
+Backend
+
+* > backend
+    * > application
+        * - CategoryService.java
+        * - ProductService.java
+        * - UploadFile.java
+        * - OrderService.java
+        * - RegistrationService.java
+        * - UserService.java
+    * > domain
+        * > model
+            * - Category.java
+            * - Order.java
+            * - OrderState.java
+            * - URLPaypalResponse.java
+            * - UserType.java:
+                    package com.harmonydealer.ecommerce.backend.domain.model;
+
+                    public enum UserType {
+                        ADMIN, USER
+                    }
+            * - DataPayment.java
+            * - OrderProduct.java
+            * - Product.java
+            * - User.java:
+                    package com.harmonydealer.ecommerce.backend.domain.model;
+
+                    import lombok.AllArgsConstructor;
+                    import lombok.Data;
+                    import lombok.NoArgsConstructor;
+
+                    import java.time.LocalDateTime;
+
+                    @Data
+                    @AllArgsConstructor
+                    @NoArgsConstructor
+                    public class User {
+                        private Integer id;
+                        private String username;
+                        private String firstName;
+                        private String lastName;
+                        private String email;
+                        private String address;
+                        private String cellphone;
+                        private String password;
+                        private UserType userType;
+                        private LocalDateTime dateCreated;
+                        private LocalDateTime dateUpdated;
+                    }
+        * > port
+            * - ICategoryRepository.java
+            * - IOrderRepository.java
+            * - IProductRepository.java
+            * - IUserRepository.java
+    * > infrastructure
+        * > adapter
+            * - CategoryCrudRepositoryImpl.java
+            * - IOrderCrudRepository.java
+            * - IUserCrudRepository.java
+            * - ProductCrudRepositoryImpl.java
+            * - ICategoryCrudRepository.java
+            * - IProductCrudRepository.java
+            * - OrderCrudRepositoryImpl.java
+            * - UserCrudRepositoryImpl.java
+        * > config
+            * - BeanConfiguration.java
+            * - PaypalConfig.java
+            * - SecurityConfig.java
+        * > dto
+            * - JWTClient.java
+            * - UserDTO.java
+        * > entity
+            * - CategoryEntity.java
+            * - OrderEntity.java
+            * - OrderProductEntity.java
+            * - ProductEntity.java
+            * - UserEntity.java
+        * > jwt
+            * - Constants.java
+            * - JWTAuthorizationFilter.java
+            * - JWTGenerator.java
+            * - JWTValidate.java
+        * > mapper
+            * - CategoryMapper.java
+            * - IOrderProductMapper.java
+            * - UserMapper.java
+            * - IOrderMapper.java
+            * - ProductMapper.java
+        * > rest
+            * - CategoryController.java
+            * - LoginController.java
+            * - PaypalController.java
+            * - RegistrationController.java
+            * - HomeController.java
+            * - OrderController.java
+            * - ProductController.java
+            * - UserController.java
+        * > service
+            * - CustomUserDetailService.java
+            * - PaypalService.java
+* - BackendApplication.java:
+        package com.harmonydealer.ecommerce.backend;
+
+        import org.springframework.boot.SpringApplication;
+        import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+        @SpringBootApplication
+        public class BackendApplication {
+
+        	public static void main(String[] args) {
+        		SpringApplication.run(BackendApplication.class, args);
+        	}
+
         }
