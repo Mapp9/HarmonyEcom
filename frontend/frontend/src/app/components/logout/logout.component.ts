@@ -14,9 +14,12 @@ export class LogoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('LogoutComponent: '+this.sessionStorage.getItem('token'))
+    console.log('LogoutComponent token: '+this.sessionStorage.getItem('token'))
     this.sessionStorage.removeItem('token');
     console.log('LogoutComponent eliminado: '+this.sessionStorage.getItem('token'))
+    console.log('LogoutComponent ordeid: '+this.sessionStorage.getItem('order'))
+    this.sessionStorage.removeItem('order');
+    console.log('LogoutComponent eliminado: '+this.sessionStorage.getItem('order'))
     this.router.navigate(['/']);
   }
 

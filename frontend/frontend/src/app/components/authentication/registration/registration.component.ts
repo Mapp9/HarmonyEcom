@@ -11,6 +11,7 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent implements OnInit {
+  // Variables to store form data
 
   username : string = '';
   name : string = '';
@@ -23,11 +24,11 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+// Dependency injection
   constructor(private authentication : AuthenticationService, private router : Router, private toastr : ToastrService) {
 
   }
-
+  // Method to register a new user
   register(){
     this.username = this.email;
     this.userType = UserType.USER;
