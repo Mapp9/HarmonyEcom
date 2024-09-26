@@ -1,0 +1,45 @@
+<app-header-user></app-header-user>
+
+<div class="container m-3">
+  <h2>Detalles de la Orden</h2>
+  <div *ngIf="order">
+    <p><strong>ID de la Orden:</strong> {{ order.id }}</p>
+    <p><strong>Fecha de Creación:</strong> {{ order.dateCreated | date: 'medium' }}</p>
+    <p><strong>Estado de la Orden:</strong> {{ order.orderState }}</p>
+    <p><strong>Total de la Orden:</strong> {{ order.totalOrderPrice | currency }}</p>
+
+    <h3>Productos en la Orden</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Total por Producto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of productDetails; let i = index">
+          <td>{{ product.name }}</td>
+          <td>{{ order.orderProducts[i].quantity }}</td>
+          <td>{{ product.price | currency }}</td>
+          <td>{{ (product.price * order.orderProducts[i].quantity) | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Detalles del Usuario</h3>
+    <div *ngIf="userDetails">
+      <p><strong>Nombre:</strong> {{ userDetails.firstName }} {{ userDetails.lastName }}</p>
+      <p><strong>Email:</strong> {{ userDetails.email }}</p>
+      <p><strong>Dirección:</strong> {{ userDetails.address }}</p>
+      <p><strong>Celular:</strong> {{ userDetails.cellphone }}</p>
+    </div>
+  </div>
+
+  <button class="btn btn-primary m-1" (click)="generatePDF()">Generar PDF</button>
+  <a class="btn btn-danger m-1" [routerLink]="['/']">Home</a>
+  <div *ngIf="!order">
+    <p>Cargando detalles de la orden...</p>
+  </div>
+</div>

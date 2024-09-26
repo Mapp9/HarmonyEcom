@@ -21,6 +21,7 @@ import { RegistrationComponent } from './components/authentication/registration/
 import { LoginComponent } from './components/authentication/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component'
 import { authGuard } from './guards/auth.guard';
+import { TicketComponent } from './components/ticket/ticket.component';
 
 const routes : Routes = [
   {path: '', component: HomeComponent},
@@ -35,7 +36,8 @@ const routes : Routes = [
   {path: 'payment/success', component: PaymentSuccessComponent},
   {path: 'user/register', component: RegistrationComponent},
   {path: 'user/login', component: LoginComponent},
-  {path: 'logout', component: LogoutComponent}
+  {path: 'logout', component: LogoutComponent},
+  {path: 'payment/success/ticket', component: TicketComponent}
 
 ];
 
@@ -54,7 +56,8 @@ const routes : Routes = [
     PaymentSuccessComponent,
     RegistrationComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    TicketComponent
   ],
   imports: [
     BrowserModule,
