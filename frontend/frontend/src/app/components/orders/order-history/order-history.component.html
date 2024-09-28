@@ -1,0 +1,33 @@
+<app-header-user> </app-header-user>
+<!-- Page Content List Orders-->
+<div class="container">
+  <!-- Page Heading -->
+  <h1 class="mt-4 mb-3">
+    Harmony Dealer <small class="badge bg-secondary">Mis Órdenes</small>
+  </h1>
+
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+    <li class="breadcrumb-item active">Ver Órdenes</li>
+  </ol>
+
+  <h2>Órdenes</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Fecha de creación</th>
+        <th>Estado</th>
+        <th>Total</th>
+        <th>Detalles</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let order of orders">
+      <tr>
+        <td>{{ order.dateCreated | date: 'shortDate' }}</td>
+        <td>{{order.orderState}}</td>
+        <td>{{calculateTotal(order)| currency:'USD':'symbol':'1.0-0'}}</td>
+        <td><button class="btn btn-info" [routerLink]="['/orders/detail', order.id]">Ver Detalles</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

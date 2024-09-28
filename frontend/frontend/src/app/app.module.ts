@@ -22,6 +22,9 @@ import { LoginComponent } from './components/authentication/login/login.componen
 import { LogoutComponent } from './components/logout/logout.component'
 import { authGuard } from './guards/auth.guard';
 import { TicketComponent } from './components/ticket/ticket.component';
+import { OrderHistoryComponent } from './components/orders/order-history/order-history.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { OrderDetailsComponent } from './components/orders/order-details/order-details.component';
 
 const routes : Routes = [
   {path: '', component: HomeComponent},
@@ -37,7 +40,9 @@ const routes : Routes = [
   {path: 'user/register', component: RegistrationComponent},
   {path: 'user/login', component: LoginComponent},
   {path: 'logout', component: LogoutComponent},
-  {path: 'payment/success/ticket', component: TicketComponent}
+  {path: 'payment/success/ticket', component: TicketComponent, canActivate: [authGuard]},
+  {path: 'user/orders', component: OrderHistoryComponent, canActivate: [authGuard]},
+  {path: 'orders/detail/:id', component: OrderDetailsComponent}
 
 ];
 
@@ -57,7 +62,10 @@ const routes : Routes = [
     RegistrationComponent,
     LoginComponent,
     LogoutComponent,
-    TicketComponent
+    TicketComponent,
+    OrderHistoryComponent,
+    FooterComponent,
+    OrderDetailsComponent
   ],
   imports: [
     BrowserModule,

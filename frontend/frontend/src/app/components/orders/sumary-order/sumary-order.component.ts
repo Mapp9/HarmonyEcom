@@ -41,7 +41,8 @@ export class SumaryOrderComponent implements OnInit {
     setTimeout(
       ()=>{
         this.sessionStorage.removeItem('token');
-      }, 600000
+        this.sessionStorage.removeItem('order');
+      }, 2500000
     );
   }
   

@@ -1,7 +1,7 @@
  <app-header-user></app-header-user>
  
  <!-- Page Content -->
- <div class="container">
+ <div class="container my-5">
   <!-- registration form -->
     <div class="card mb-3">
       <div class="row no-gutters">
@@ -52,4 +52,7 @@
         <button type="submit" class="btn btn-success">Guardar</button>
       </div>
     </form>
+    <div class="my-2 py-2">
+    <a [routerLink]="['/user/register']" >Si ya tiene cuenta aqui puede ingresar aqui</a>
+  </div>
   </div>

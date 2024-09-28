@@ -15,689 +15,77 @@ Backend
                                 * - ProductService.java
                                 * - UploadFile.java
                                 * - OrderService.java
-                                * - RegistrationService.java:
-                                        package com.harmonydealer.ecommerce.backend.application;
-
-                                        import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                        import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
-
-                                        public class RegistrationService {
-                                            private final IUserRepository iUserRepository;
-
-                                            public RegistrationService(IUserRepository iUserRepository) {
-                                                this.iUserRepository = iUserRepository;
-                                            }
-
-                                            public User registrer (User user){
-                                                return iUserRepository.save(user);
-                                            }
-                                        }
-                                * - UserService.java:
-                                    package com.harmonydealer.ecommerce.backend.application;
-
-                                    import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                    import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
-                                    import lombok.AllArgsConstructor;
-
-                                    @AllArgsConstructor
-                                    public class UserService {
-                                        private final IUserRepository iUserRepository;
-
-                                        public User save(User user){
-                                            return this.iUserRepository.save(user);
-                                        }
-                                        public Iterable<User> findAll(){
-                                            return this.iUserRepository.findAll();
-                                        }
-                                        public User findById(Integer id){
-                                            return this.iUserRepository.findById(id);
-                                        }
-                                        public User findByEmail(String email){
-                                            return this.iUserRepository.findByEmail(email);
-                                        }
-                                    }
+                                * - RegistrationService.java
+                                * - UserService.java
+                                    
                             * > domain
                                 * > model
                                     * - Category.java
                                     * - Order.java
                                     * - OrderState.java
                                     * - URLPaypalResponse.java
-                                    * - UserType.java:
-                                            package com.harmonydealer.ecommerce.backend.domain.model;
-
-                                            public enum UserType {
-                                                ADMIN, USER
-                                            }
+                                    * - UserType.java
                                     * - DataPayment.java
                                     * - OrderProduct.java
                                     * - Product.java
-                                    * - User.java:
-                                            package com.harmonydealer.ecommerce.backend.domain.model;
-
-                                            import lombok.AllArgsConstructor;
-                                            import lombok.Data;
-                                            import lombok.NoArgsConstructor;
-
-                                            import java.time.LocalDateTime;
-
-                                            @Data
-                                            @AllArgsConstructor
-                                            @NoArgsConstructor
-                                            public class User {
-                                                private Integer id;
-                                                private String username;
-                                                private String firstName;
-                                                private String lastName;
-                                                private String email;
-                                                private String address;
-                                                private String cellphone;
-                                                private String password;
-                                                private UserType userType;
-                                                private LocalDateTime dateCreated;
-                                                private LocalDateTime dateUpdated;
-                                            }
+                                    * - User.java
+                                            
                                 * > port
                                     * - ICategoryRepository.java
                                     * - IOrderRepository.java
                                     * - IProductRepository.java
-                                    * - IUserRepository.java:
-                                            package com.harmonydealer.ecommerce.backend.domain.port;
-
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-
-                                            public interface IUserRepository {
-                                                User save(User user);
-                                                Iterable<User> findAll();
-                                                User findByEmail(String email);
-                                                User findById(Integer id);
-                                            }
+                                    * - IUserRepository.java
                             * > infrastructure
                                 * > adapter
                                     * - CategoryCrudRepositoryImpl.java
                                     * - IOrderCrudRepository.java
-                                    * - IUserCrudRepository.java:
-                                            package com.harmonydealer.ecommerce.backend.domain.port;
-
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-
-                                            public interface IUserRepository {
-                                                User save(User user);
-                                                Iterable<User> findAll();
-                                                User findByEmail(String email);
-                                                User findById(Integer id);
-                                            }
+                                    * - IUserCrudRepository.java
                                     * - ProductCrudRepositoryImpl.java
                                     * - ICategoryCrudRepository.java
                                     * - IProductCrudRepository.java
                                     * - OrderCrudRepositoryImpl.java
-                                    * - UserCrudRepositoryImpl.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.adapter;
-
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                            import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.mapper.UserMapper;
-                                            import lombok.AllArgsConstructor;
-                                            import org.springframework.stereotype.Repository;
-
-                                            @AllArgsConstructor
-                                            @Repository
-                                            public class UserCrudRepositoryImpl implements IUserRepository {
-                                                private final IUserCrudRepository iUserCrudRepository;
-                                                private final UserMapper userMapper;
-
-
-                                                @Override
-                                                public User save(User user) {
-                                                    return userMapper.toUser(iUserCrudRepository.save(userMapper.toUserEntity(user)));
-                                                }
-
-                                                @Override
-                                                public Iterable<User> findAll(){
-                                                    return userMapper.toUsers(iUserCrudRepository.findAll());
-                                                }
-
-                                                @Override
-                                                public User findByEmail(String email) {
-                                                    return userMapper.toUser(iUserCrudRepository.findByEmail(email).orElseThrow(
-                                                            ()-> new  RuntimeException("El usuario con email :"+email+" no ha sido encontrado.")
-                                                    ));
-                                                }
-
-                                                @Override
-                                                public User findById(Integer id) {
-                                                    return userMapper.toUser(iUserCrudRepository.findById(id).get());
-                                                }
-                                            }
+                                    * - UserCrudRepositoryImpl.java
                                 * > config
-                                    * - BeanConfiguration.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.config;
-
-                                            import com.harmonydealer.ecommerce.backend.application.*;
-                                            import com.harmonydealer.ecommerce.backend.domain.port.ICategoryRepository;
-                                            import com.harmonydealer.ecommerce.backend.domain.port.IOrderRepository;
-                                            import com.harmonydealer.ecommerce.backend.domain.port.IProductRepository;
-                                            import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
-                                            import org.springframework.context.annotation.Bean;
-                                            import org.springframework.context.annotation.Configuration;
-
-                                            @Configuration
-                                            public class BeanConfiguration {
-
-                                                @Bean
-                                                public UserService userService(IUserRepository iUserRepository){
-                                                    return new UserService(iUserRepository);
-                                                }
-
-                                                @Bean
-                                                public CategoryService categoryService(ICategoryRepository iCategoryRepository){
-                                                    return new CategoryService(iCategoryRepository);
-                                                }
-
-                                                @Bean
-                                                public ProductService productService(IProductRepository iProductRepository, UploadFile uploadFile){
-                                                    return new ProductService(iProductRepository, uploadFile);
-                                                }
-                                                @Bean
-                                                public OrderService orderService(IOrderRepository iOrderRepository){
-                                                    return new OrderService(iOrderRepository);
-                                                }
-
-                                                @Bean
-                                                public UploadFile uploadFile(){
-                                                    return new UploadFile();
-                                                }
-
-                                                @Bean
-                                                public RegistrationService registrationService(IUserRepository iUserRepository){
-                                                    return new RegistrationService(iUserRepository);
-                                                }
-                                            }
+                                    * - BeanConfiguration.java
                                     * - PaypalConfig.java
-                                    * - SecurityConfig.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.config;
-
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.jwt.JWTAuthorizationFilter;
-                                            import lombok.extern.slf4j.Slf4j;
-                                            import org.springframework.context.annotation.Bean;
-                                            import org.springframework.context.annotation.Configuration;
-                                            import org.springframework.security.authentication.AuthenticationManager;
-                                            import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-                                            import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-                                            import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-                                            import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-                                            import org.springframework.security.web.SecurityFilterChain;
-                                            import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-                                            import org.springframework.web.cors.CorsConfiguration;
-
-                                            import java.util.Arrays;
-
-                                            @Configuration
-                                            @EnableWebSecurity
-                                            @Slf4j
-                                            public class SecurityConfig {
-
-                                                private final JWTAuthorizationFilter jwtAuthorizationFilter;
-
-                                                public SecurityConfig(JWTAuthorizationFilter jwtAuthorizationFilter) {
-                                                    this.jwtAuthorizationFilter = jwtAuthorizationFilter;
-                                                }
-
-                                                @Bean
-                                                public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-                                                    return authenticationConfiguration.getAuthenticationManager();
-                                                }
-
-                                                @Bean
-                                                public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-                                                    httpSecurity.cors(
-                                                            cors -> cors.configurationSource(
-                                                                    request -> {
-                                                                        CorsConfiguration corsConfiguration = new CorsConfiguration();
-                                                                        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
-                                                                        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
-                                                                        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
-                                                                        return corsConfiguration;
-                                                                    }
-                                                            ))
-                                                            .csrf(csrf -> csrf.disable()).authorizeHttpRequests(
-                                                            auth-> auth.requestMatchers("/api/v1/admin/categories/**").hasRole("ADMIN")
-                                                                    .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
-                                                                    .requestMatchers("/api/v1/orders/**").hasRole("USER")
-                                                                    .requestMatchers("/api/v1/payments/success").permitAll()
-                                                                    .requestMatchers("/api/v1/payments/**").hasRole("USER")
-                                                                    .requestMatchers("/api/v1/users/**").permitAll()
-                                                                    .requestMatchers("/images/**").permitAll()
-                                                                    .requestMatchers("/api/v1/home/**").permitAll()
-                                                                    .requestMatchers("/api/v1/security/**").permitAll().anyRequest().authenticated()
-
-                                                    ).addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
-
-                                                    return httpSecurity.build();
-
-                                                }
-
-                                                @Bean
-                                                public BCryptPasswordEncoder passwordEncoder (){
-                                                    return new BCryptPasswordEncoder();
-                                                }
-                                            }
+                                    * - SecurityConfig.java
                                 * > dto
-                                    * - JWTClient.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.dto;
-
-                                            public record JWTClient(Integer id, String token, String type) {
-                                            }
-                                    * - UserDTO.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.dto;
-
-                                            public record UserDTO(String username, String password) {
-                                            }
+                                    * - JWTClient.java
+                                    * - UserDTO.java
                                 * > entity
                                     * - CategoryEntity.java
                                     * - OrderEntity.java
                                     * - OrderProductEntity.java
                                     * - ProductEntity.java
-                                    * - UserEntity.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.entity;
-
-                                            import com.harmonydealer.ecommerce.backend.domain.model.UserType;
-                                            import jakarta.persistence.*;
-                                            import lombok.Data;
-                                            import lombok.NoArgsConstructor;
-                                            import org.hibernate.annotations.CreationTimestamp;
-                                            import org.hibernate.annotations.UpdateTimestamp;
-
-                                            import java.time.LocalDateTime;
-
-                                            @Entity
-                                            @Table(name = "users")
-                                            @Data
-                                            @NoArgsConstructor
-                                            public class UserEntity {
-                                                @Id
-                                                @GeneratedValue(strategy = GenerationType.IDENTITY)
-                                                private Integer id;
-                                                private String username;
-                                                private String firstName;
-                                                private String lastName;
-                                                @Column(unique = true)
-                                                private String email;
-                                                private String address;
-                                                private String cellphone;
-                                                private String password;
-                                                @Enumerated(EnumType.STRING)
-                                                private UserType userType;
-                                                @CreationTimestamp
-                                                private LocalDateTime dateCreated;
-                                                @UpdateTimestamp
-                                                private LocalDateTime dateUpdated;
-                                            }
+                                    * - UserEntity.java
                                 * > jwt
-                                    * - Constants.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.jwt;
-
-                                            import io.jsonwebtoken.security.Keys;
-
-                                            import java.nio.charset.StandardCharsets;
-                                            import java.security.Key;
-
-                                            public class Constants {
-                                                public static final String HEADER_AUTHORIZATION = "Authorization";
-                                                public static final String TOKEN_BEARER_PREFIX = "Bearer ";
-
-                                                public static final String SUPER_SECRET_KEY = "fniZhrPyN7rG4v6H0b45v3DGulvN907STIM4qiOVXhAJMBJCcvZjv8A9CP50s5qqrOKF4vVtZXB";
-
-                                                public static final long TOKEN_EXPIRATION_TIME = 1500000;
-
-                                                public static Key getSignedKey(String secretKey){
-                                                    byte [] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-                                                    return Keys.hmacShaKeyFor(keyBytes);
-                                                }
-                                            }
-                                    * - JWTAuthorizationFilter.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.jwt;
-
-
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.service.CustomUserDetailService;
-                                            import io.jsonwebtoken.Claims;
-                                            import io.jsonwebtoken.ExpiredJwtException;
-                                            import io.jsonwebtoken.MalformedJwtException;
-                                            import io.jsonwebtoken.UnsupportedJwtException;
-                                            import jakarta.servlet.FilterChain;
-                                            import jakarta.servlet.ServletException;
-                                            import jakarta.servlet.http.HttpServletRequest;
-                                            import jakarta.servlet.http.HttpServletResponse;
-                                            import lombok.extern.slf4j.Slf4j;
-                                            import org.springframework.security.core.context.SecurityContextHolder;
-                                            import org.springframework.stereotype.Component;
-                                            import org.springframework.web.filter.OncePerRequestFilter;
-
-                                            import java.io.IOException;
-
-                                            import static com.harmonydealer.ecommerce.backend.infrastructure.jwt.Constants.HEADER_AUTHORIZATION;
-                                            import static com.harmonydealer.ecommerce.backend.infrastructure.jwt.JWTValidate.*;
-
-                                            @Slf4j
-                                            @Component
-                                            public class JWTAuthorizationFilter extends OncePerRequestFilter {
-                                                private CustomUserDetailService customUserDetailService;
-
-                                                public JWTAuthorizationFilter(CustomUserDetailService customUserDetailService) {
-                                                    this.customUserDetailService = customUserDetailService;
-                                                }
-
-                                                @Override
-                                                protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-                                                    try{
-                                                        if(tokenExists(request, response)){
-                                                            Claims claims = JWTValid(request);
-                                                            if(claims.get("authorities") != null){
-                                                                setAuthentication(claims, customUserDetailService);
-                                                            }else {
-                                                                SecurityContextHolder.clearContext();
-                                                            }
-                                                        }else {
-                                                            SecurityContextHolder.clearContext();
-                                                        }
-                                                        filterChain.doFilter(request, response);
-
-                                                    }catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e){
-                                                        log.info("doFilterInternal {}", e.toString());
-                                                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                                                        response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                                                        return;
-                                                    }
-
-                                                }
-                                            }
-
-                                    * - JWTGenerator.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.jwt;
-
-
-                                            import io.jsonwebtoken.Jwts;
-                                            import io.jsonwebtoken.SignatureAlgorithm;
-                                            import org.springframework.security.core.GrantedAuthority;
-                                            import org.springframework.security.core.authority.AuthorityUtils;
-                                            import org.springframework.security.core.context.SecurityContextHolder;
-                                            import org.springframework.stereotype.Service;
-
-                                            import java.util.Date;
-                                            import java.util.List;
-                                            import java.util.stream.Collectors;
-
-                                            import static com.harmonydealer.ecommerce.backend.infrastructure.jwt.Constants.*;
-
-                                            @Service
-                                            public class JWTGenerator {
-                                                public String getToken(String username){
-                                                    List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(
-                                                            SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().toString()
-                                                    );
-
-                                                    String token = Jwts.builder()
-                                                            .setId("ecommerce")
-                                                            .setSubject(username)
-                                                            .claim("authorities",authorityList.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                                                            .setIssuedAt(new Date(System.currentTimeMillis()))
-                                                            .setExpiration(new Date(System.currentTimeMillis()+TOKEN_EXPIRATION_TIME))
-                                                            .signWith(getSignedKey(SUPER_SECRET_KEY), SignatureAlgorithm.HS512).compact();
-
-                                                    return "Bearer "+token;
-                                                }
-
-                                            }
-                                    * - JWTValidate.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.jwt;
-
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.service.CustomUserDetailService;
-                                            import io.jsonwebtoken.Claims;
-                                            import io.jsonwebtoken.Jwts;
-                                            import jakarta.servlet.http.HttpServletRequest;
-                                            import jakarta.servlet.http.HttpServletResponse;
-                                            import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-                                            import org.springframework.security.core.context.SecurityContextHolder;
-                                            import org.springframework.security.core.userdetails.UserDetails;
-
-                                            import static com.harmonydealer.ecommerce.backend.infrastructure.jwt.Constants.*;
-
-                                            public class JWTValidate {
-
+                                    * - Constants.java
+                                    * - JWTAuthorizationFilter.java
+                                    * - JWTGenerator.java
+                                    * - JWTValidate.java
                                             
-                                                public static boolean tokenExists(HttpServletRequest request, HttpServletResponse response){
-                                                    String header = request.getHeader(HEADER_AUTHORIZATION);
-                                                    if (header == null || !header.startsWith(TOKEN_BEARER_PREFIX))
-                                                        return false;
-                                                    return true;
-                                                }
-
-                                                //Valida que el token sea el correcto
-                                                public static Claims JWTValid(HttpServletRequest request){
-                                                    String jwtToken = request.getHeader(HEADER_AUTHORIZATION).replace(TOKEN_BEARER_PREFIX, "");
-                                                    return Jwts.parserBuilder()
-                                                            .setSigningKey(getSignedKey(SUPER_SECRET_KEY)).build()
-                                                            .parseClaimsJws(jwtToken).getBody();
-                                                }
-                                                //Autenticar el usuario en el flujo de spring
-                                                public static void setAuthentication(Claims claims, CustomUserDetailService customUserDetailService){
-                                                    UserDetails userDetails = customUserDetailService.loadUserByUsername(claims.getSubject());
-                                                    UsernamePasswordAuthenticationToken authentication =
-                                                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                                                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                                                }
-
-                                            }
                                 * > mapper
                                     * - CategoryMapper.java
                                     * - IOrderProductMapper.java
-                                    * - UserMapper.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.mapper;
-
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.entity.UserEntity;
-                                            import org.mapstruct.InheritInverseConfiguration;
-                                            import org.mapstruct.Mapper;
-                                            import org.mapstruct.Mapping;
-                                            import org.mapstruct.Mappings;
-
-                                            @Mapper(componentModel = "spring")
-                                            public interface UserMapper {
-                                                @Mappings(
-                                                        {
-                                                                @Mapping(source = "id", target = "id"),
-                                                                @Mapping(source = "username", target = "username"),
-                                                                @Mapping(source = "firstName", target = "firstName"),
-                                                                @Mapping(source = "lastName", target = "lastName"),
-                                                                @Mapping(source = "email", target = "email"),
-                                                                @Mapping(source = "address", target = "address"),
-                                                                @Mapping(source = "cellphone", target = "cellphone"),
-                                                                @Mapping(source = "password", target = "password"),
-                                                                @Mapping(source = "userType", target = "userType"),
-                                                                @Mapping(source = "dateCreated", target = "dateCreated"),
-                                                                @Mapping(source = "dateUpdated", target = "dateUpdated")
-                                                        }
-                                                )
-                                                User toUser(UserEntity userEntity);
-                                                Iterable<User> toUsers(Iterable<UserEntity> userEntities);
-
-                                                @InheritInverseConfiguration
-                                                UserEntity toUserEntity(User user);
-                                            }
+                                    * - UserMapper.java
                                     * - IOrderMapper.java
                                     * - ProductMapper.java
                                 * > rest
                                     * - CategoryController.java
-                                    * - LoginController.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.rest;
-
-
-                                            import com.harmonydealer.ecommerce.backend.application.UserService;
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.dto.JWTClient;
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.dto.UserDTO;
-                                            import com.harmonydealer.ecommerce.backend.infrastructure.jwt.JWTGenerator;
-                                            import lombok.extern.slf4j.Slf4j;
-                                            import org.springframework.http.HttpStatus;
-                                            import org.springframework.http.ResponseEntity;
-                                            import org.springframework.security.authentication.AuthenticationManager;
-                                            import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-                                            import org.springframework.security.core.Authentication;
-                                            import org.springframework.security.core.context.SecurityContextHolder;
-                                            import org.springframework.web.bind.annotation.*;
-
-                                            @RestController
-                                            @RequestMapping("/api/v1/security")
-                                            @CrossOrigin(origins = "http://localhost:4200")
-                                            @Slf4j
-                                            public class LoginController {
-
-                                                private final AuthenticationManager authenticationManager;
-                                                private final JWTGenerator jwtGenerator;
-                                                private final UserService userService;
-
-                                                public LoginController(AuthenticationManager authenticationManager, JWTGenerator jwtGenerator, UserService userService) {
-                                                    this.authenticationManager = authenticationManager;
-                                                    this.jwtGenerator = jwtGenerator;
-                                                    this.userService = userService;
-                                                }
-
-                                                @PostMapping("/login")
-                                                public ResponseEntity<JWTClient> login(@RequestBody UserDTO userDTO){
-                                                    log.info("Success");
-                                                    Authentication authentication = authenticationManager.authenticate(
-                                                            new UsernamePasswordAuthenticationToken(userDTO.username(),userDTO.password())
-                                                    );
-
-                                                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                                                    log.info("El role de usuario es: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().findFirst().get().toString());
-
-                                                    User user = userService.findByEmail(userDTO.username());
-
-                                                    String token = jwtGenerator.getToken(userDTO.username());
-                                                    JWTClient jwtClient = new JWTClient(user.getId(), token, user.getUserType().toString());
-
-                                                    return new ResponseEntity<>(jwtClient, HttpStatus.OK);
-                                                }
-                                            }
+                                    * - LoginController.java
                                     * - PaypalController.java
-                                    * - RegistrationController.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.rest;
-
-
-                                            import com.harmonydealer.ecommerce.backend.application.RegistrationService;
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                            import lombok.extern.slf4j.Slf4j;
-                                            import org.springframework.http.HttpStatus;
-                                            import org.springframework.http.ResponseEntity;
-                                            import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-                                            import org.springframework.web.bind.annotation.*;
-
-                                            @RestController
-                                            @RequestMapping("/api/v1/security")
-                                            @CrossOrigin(origins = "http://localhost:4200")
-                                            @Slf4j
-                                            public class RegistrationController {
-                                                private final RegistrationService registrationService;
-                                                private final BCryptPasswordEncoder passwordEncoder;
-
-                                                public RegistrationController(RegistrationService registrationService, BCryptPasswordEncoder passwordEncoder) {
-                                                    this.registrationService = registrationService;
-                                                    this.passwordEncoder = passwordEncoder;
-                                                }
-
-                                                @PostMapping("/registrer")
-                                                public ResponseEntity<User>  registrer (@RequestBody User user){
-                                                    log.info("Clave encriptada: {}", passwordEncoder.encode(user.getPassword()));
-                                                    user.setPassword(passwordEncoder.encode(user.getPassword()));
-                                                    return new ResponseEntity<>(registrationService.registrer(user), HttpStatus.CREATED);
-                                                }
-
-
-
-                                            }
+                                    * - RegistrationController.java
                                     * - HomeController.java
                                     * - OrderController.java
                                     * - ProductController.java
-                                    * - UserController.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.rest;
-
-                                            import com.harmonydealer.ecommerce.backend.application.UserService;
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                            import org.springframework.http.ResponseEntity;
-                                            import org.springframework.web.bind.annotation.*;
-
-                                            @RestController
-                                            @RequestMapping("/api/v1/users")
-                                            @CrossOrigin(origins = "http://localhost:4200")
-                                            public class UserController {
-                                                private final UserService userService;
-
-                                                public UserController(UserService userService) {
-                                                    this.userService = userService;
-                                                }
-
-                                                @PostMapping
-                                                public User save(@RequestBody User user){
-                                                    return userService.save(user);
-                                                }
-
-                                                @GetMapping
-                                                public ResponseEntity<Iterable<User>> findAll(){
-                                                    return ResponseEntity.ok(userService.findAll());
-                                                }
-
-                                                @GetMapping("/{id}")
-                                                public User findById(@PathVariable Integer id){
-                                                    return userService.findById(id);
-                                                }
-
-                                            }
+                                    * - UserController.java
+                                            
 
                                 * > service
-                                    * - CustomUserDetailService.java:
-                                            package com.harmonydealer.ecommerce.backend.infrastructure.service;
-
-                                            import com.harmonydealer.ecommerce.backend.application.UserService;
-                                            import com.harmonydealer.ecommerce.backend.domain.model.User;
-                                            import lombok.extern.slf4j.Slf4j;
-                                            import org.springframework.security.core.userdetails.UserDetails;
-                                            import org.springframework.security.core.userdetails.UserDetailsService;
-                                            import org.springframework.security.core.userdetails.UsernameNotFoundException;
-                                            import org.springframework.stereotype.Service;
-
-                                            @Service
-                                            @Slf4j
-                                            public class CustomUserDetailService implements UserDetailsService {
-                                                private UserService userService;
-
-                                                public CustomUserDetailService(UserService userService) {
-                                                    this.userService = userService;
-                                                }
-
-                                                @Override
-                                                public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                                                    log.info("loadUserByUsername: {}", username);
-                                                    User user = userService.findByEmail(username);
-                                                    return org.springframework.security.core.userdetails.User.builder().username(user.getEmail())
-                                                            .password(user.getPassword()).roles(user.getUserType().name()).build();
-                                                }
-                                            }
-
+                                    * - CustomUserDetailService.java
                                     * - PaypalService.java
-                            * - BackendApplication.java:
-                                package com.harmonydealer.ecommerce.backend;
-
-                                import org.springframework.boot.SpringApplication;
-                                import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-                                @SpringBootApplication
-                                public class BackendApplication {
-
-                                    public static void main(String[] args) {
-                                        SpringApplication.run(BackendApplication.class, args);
-                                    }
-
-                                }
+                            * - BackendApplication.java
+                                
         * > resources
     * > test
 * > target

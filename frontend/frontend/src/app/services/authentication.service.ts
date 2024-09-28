@@ -21,4 +21,8 @@ export class AuthenticationService {
   login(userDto:Userdto):Observable<Jwtclient>{
     return this.httpClient.post<Jwtclient>(this.apiUrl+"/login", userDto)
   }
+
+  isLoggedIn(): boolean {
+    return !!sessionStorage.getItem('token');
+  }
 }
