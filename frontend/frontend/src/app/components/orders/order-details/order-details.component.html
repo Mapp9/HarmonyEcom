@@ -1,1 +1,51 @@
-<p>order-details works!</p>
+<app-header-user></app-header-user>
+<div class="container mt-5">
+    <!-- Encabezado de la página -->
+    <h2>{{ pageTitle }}</h2>
+  
+    <!-- Datos del usuario -->
+    <div class="mt-4 mb-4">
+      <h3>Datos del Cliente</h3>
+      <p><strong>Nombre:</strong> {{ firstName }} {{ lastName }}</p>
+      <p><strong>Email:</strong> {{ email }}</p>
+      <p><strong>Dirección:</strong> {{ address }}</p>
+    </div>
+  
+    <!-- Lista de productos en la orden -->
+    <h3>Productos en la Orden</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Producto</th>
+          <th>Precio Unitario</th>
+          <th>Cantidad</th>
+          <th>Total por Producto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of productsDetails; let i = index">
+          <td>
+            <img [src]="product.urlImage" alt="{{ product.name }}" class="img-fluid" style="width: 100px; height: auto;">
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price | currency:'USD':'symbol':'1.0-0' }}</td>
+          <td>{{ orderProducts[i].quantity }}</td>
+          <td>{{ (product.price * orderProducts[i].quantity) | currency:'USD':'symbol':'1.0-0' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Total de la orden -->
+    <div class="text-end mb-4">
+      <h4>Total de la Orden: {{ totalOrder | currency:'USD':'symbol':'1.0-0' }}</h4>
+    </div>
+  
+    <!-- Botones -->
+    <div class="d-flex justify-content-between">
+      <button class="btn btn-secondary" (click)="goBackToOrderList()">Regresar a la Lista de Órdenes</button>
+      <button class="btn btn-success" (click)="generatePDF()">Generar PDF</button>
+    </div>
+  </div>
+  
+  <app-footer></app-footer>
