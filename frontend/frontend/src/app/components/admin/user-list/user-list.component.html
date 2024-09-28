@@ -1,0 +1,32 @@
+<app-header-admin></app-header-admin>
+
+<div class="container">
+    <h2>Lista de Usuarios</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Tipo de Usuario</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{user.id}}</td>
+          <td>{{user.firstName}} {{user.lastName}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.userType}}</td>
+          <td>
+            <button class="btn btn-primary m-1" [routerLink]="['/admin/users', user.id, 'orders']">Ver Pedidos</button>
+            <button class="btn btn-primary m-1" [routerLink]="['/admin/edit-user', user.id]">Editar</button>
+            <button class="btn btn-danger m-1" (click)="deleteUser(user.id)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<app-footer></app-footer>
+  
