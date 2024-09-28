@@ -2,6 +2,7 @@ package com.harmonydealer.ecommerce.backend.infrastructure.rest;
 
 import com.harmonydealer.ecommerce.backend.application.UserService;
 import com.harmonydealer.ecommerce.backend.domain.model.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,4 +31,9 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteById(@PathVariable Integer id){
+        userService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

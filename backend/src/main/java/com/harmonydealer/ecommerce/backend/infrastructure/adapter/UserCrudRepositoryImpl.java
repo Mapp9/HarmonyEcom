@@ -34,4 +34,12 @@ public class UserCrudRepositoryImpl implements IUserRepository {
     public User findById(Integer id) {
         return userMapper.toUser(iUserCrudRepository.findById(id).get());
     }
+
+    @Override
+    public void deleteById(Integer id) {
+        iUserCrudRepository.findById(id).orElseThrow(
+                ()-> new RuntimeException("Usuario con id: " + id + " no existe")
+        );
+        iUserCrudRepository.deleteById(id);
+    }
 }
