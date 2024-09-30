@@ -9,6 +9,8 @@ import com.harmonydealer.ecommerce.backend.infrastructure.mapper.IOrderMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @AllArgsConstructor
 public class OrderCrudRepositoryImpl implements IOrderRepository {
@@ -52,5 +54,21 @@ public class OrderCrudRepositoryImpl implements IOrderRepository {
         }else {
             iOrderCrudRepository.updateStateById(id, OrderState.CONFIRMED);
         }
+    }
+
+    public List<Object[]> getSalesByDay() {
+        return iOrderCrudRepository.getSalesByDay();
+    }
+
+    public List<Object[]> getSalesByMonth() {
+        return iOrderCrudRepository.getSalesByMonth();
+    }
+
+    public List<Object[]> getSalesByYear() {
+        return iOrderCrudRepository.getSalesByYear();
+    }
+
+    public List<Object[]> getTopSellingProducts() {
+        return iOrderCrudRepository.getTopSellingProducts();
     }
 }

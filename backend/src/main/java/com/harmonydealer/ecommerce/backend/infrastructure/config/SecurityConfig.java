@@ -48,6 +48,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/admin/products/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/admin/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/admin/orders/**").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/admin/analytics/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/orders/**").authenticated()
                         .requestMatchers("/api/v1/payments/success").permitAll()
                         .requestMatchers("/api/v1/payments/**").hasRole("USER")

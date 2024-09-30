@@ -1,143 +1,184 @@
+Quiero implementar una funcionalidad que le muestre analiticas de los datos de venta al usuario administrador, que le permita ver las ventas por día, mes y año en un gráfico de lineas. Tambien que le permita ver los productos más vendidos en un gráfico de pastel.
+Ayudame a implementar esta funcionalidad paso por paso, no pases al siguiente paso hasta que yo diga.
+Este es mi código:
+
 Backend
 * > src/main/java/com/harmonydealer/ecommerce
     * > backend
         * > application
-            * - UserService.java:
+            * - OrderService.java:
                 package com.harmonydealer.ecommerce.backend.application;
 
-                import com.harmonydealer.ecommerce.backend.domain.model.User;
-                import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
+                import com.harmonydealer.ecommerce.backend.domain.model.Order;
+                import com.harmonydealer.ecommerce.backend.domain.port.IOrderRepository;
                 import lombok.AllArgsConstructor;
 
                 @AllArgsConstructor
-                public class UserService {
-                    private final IUserRepository iUserRepository;
+                public class OrderService {
 
-                    public User save(User user){
-                        return this.iUserRepository.save(user);
+                    private final IOrderRepository iOrderRepository;
+
+                    public Order save (Order order){
+                        return this.iOrderRepository.save(order);
                     }
-                    public Iterable<User> findAll(){
-                        return this.iUserRepository.findAll();
+                    public Iterable<Order> findAll(){
+                        return this.iOrderRepository.findAll();
                     }
-                    public User findById(Integer id){
-                        return this.iUserRepository.findById(id);
+                    public Order findById(Integer id){
+                        return this.iOrderRepository.findById(id);
                     }
-                    public User findByEmail(String email){
-                        return this.iUserRepository.findByEmail(email);
+                    public Iterable<Order> findByUserId(Integer userId){
+                        return this.iOrderRepository.findByUserId(userId);
                     }
-                    public void deleteById(Integer id){
-                        iUserRepository.deleteById(id);
+                    public void updateStateById(Integer id, String state){
+                        this.iOrderRepository.updateStateById(id, state);
                     }
                 }
 
+
         * > domain
             * > model
-                * - User.java:
+                * - Order.java:
                     package com.harmonydealer.ecommerce.backend.domain.model;
 
-                    import lombok.AllArgsConstructor;
                     import lombok.Data;
-                    import lombok.NoArgsConstructor;
 
+                    import java.math.BigDecimal;
                     import java.time.LocalDateTime;
+                    import java.util.ArrayList;
+                    import java.util.List;
 
                     @Data
-                    @AllArgsConstructor
-                    @NoArgsConstructor
-                    public class User {
+                    public class Order {
+
                         private Integer id;
-                        private String username;
-                        private String firstName;
-                        private String lastName;
-                        private String email;
-                        private String address;
-                        private String cellphone;
-                        private String password;
-                        private UserType userType;
                         private LocalDateTime dateCreated;
-                        private LocalDateTime dateUpdated;
+                        private List<OrderProduct> orderProducts;
+                        private OrderState orderState;
+                        private Integer userId;
+
+                        public Order() {
+                            orderProducts = new ArrayList<>();
+                        }
+                        public BigDecimal getTotalOrderPrice(){
+                            return this.orderProducts.stream().map( orderProduct -> orderProduct.getTotalItem()).reduce(BigDecimal.ZERO, BigDecimal::add);
+                        }
                     }
 
-                * - UserType.java:
-                        package com.harmonydealer.ecommerce.backend.domain.model;
+                * - OrderProduct.java:
+                    package com.harmonydealer.ecommerce.backend.domain.model;
 
-                        public enum UserType {
-                            ADMIN, USER
+                    import lombok.Data;
+
+                    import java.math.BigDecimal;
+
+                    @Data
+                    public class OrderProduct {
+                        private Integer id;
+                        private BigDecimal quantity;
+                        private BigDecimal price;
+                        private Integer productId;
+
+
+                        public BigDecimal getTotalItem(){
+                            return this.price.multiply(quantity);
                         }
+                    }
+
+                
             * > port
-                * - IUserRepository.java:
+                * - IOrderRepository.java:
                     package com.harmonydealer.ecommerce.backend.domain.port;
 
-                    import com.harmonydealer.ecommerce.backend.domain.model.User;
+                    import com.harmonydealer.ecommerce.backend.domain.model.Order;
 
-                    public interface IUserRepository {
-                        User save(User user);
-                        Iterable<User> findAll();
-                        User findByEmail(String email);
-                        User findById(Integer id);
-                        void deleteById(Integer id);
+                    public interface IOrderRepository {
+                        Order save (Order order);
+                        Order findById(Integer id);
+                        Iterable<Order> findAll();
+                        Iterable<Order> findByUserId(Integer userId);
+                        void updateStateById(Integer id, String state);
                     }
 
         * > infrastructure
             * > adapter
-                * - IUserCrudRepository.java:
+                * - IOrderCrudRepository.java:
                     package com.harmonydealer.ecommerce.backend.infrastructure.adapter;
 
+                    import com.harmonydealer.ecommerce.backend.domain.model.OrderState;
+                    import com.harmonydealer.ecommerce.backend.infrastructure.entity.OrderEntity;
                     import com.harmonydealer.ecommerce.backend.infrastructure.entity.UserEntity;
+                    import org.springframework.data.jpa.repository.Modifying;
+                    import org.springframework.data.jpa.repository.Query;
                     import org.springframework.data.repository.CrudRepository;
+                    import org.springframework.transaction.annotation.Transactional;
 
-                    import java.util.Optional;
+                    public interface IOrderCrudRepository extends CrudRepository<OrderEntity, Integer> {
+                        @Transactional
+                        @Modifying
+                        @Query("UPDATE OrderEntity o SET o.orderState = :state WHERE o.id = :id")
+                        void updateStateById(Integer id, OrderState state);
 
-                    public interface IUserCrudRepository extends CrudRepository<UserEntity, Integer> {
-                        Optional<UserEntity> findByEmail(String email);
+                        Iterable<OrderEntity> findByUserEntity(UserEntity userEntity);
                     }
-
-                * - UserCrudRepositoryImpl.java:
+                * - OrderCrudRepository.java:
                     package com.harmonydealer.ecommerce.backend.infrastructure.adapter;
 
-                    import com.harmonydealer.ecommerce.backend.domain.model.User;
-                    import com.harmonydealer.ecommerce.backend.domain.port.IUserRepository;
-                    import com.harmonydealer.ecommerce.backend.infrastructure.mapper.UserMapper;
+                    import com.harmonydealer.ecommerce.backend.domain.model.Order;
+                    import com.harmonydealer.ecommerce.backend.domain.model.OrderState;
+                    import com.harmonydealer.ecommerce.backend.domain.port.IOrderRepository;
+                    import com.harmonydealer.ecommerce.backend.infrastructure.entity.OrderEntity;
+                    import com.harmonydealer.ecommerce.backend.infrastructure.entity.UserEntity;
+                    import com.harmonydealer.ecommerce.backend.infrastructure.mapper.IOrderMapper;
                     import lombok.AllArgsConstructor;
                     import org.springframework.stereotype.Repository;
 
-                    @AllArgsConstructor
                     @Repository
-                    public class UserCrudRepositoryImpl implements IUserRepository {
-                        private final IUserCrudRepository iUserCrudRepository;
-                        private final UserMapper userMapper;
+                    @AllArgsConstructor
+                    public class OrderCrudRepositoryImpl implements IOrderRepository {
+                        private final IOrderCrudRepository iOrderCrudRepository;
+                        private final IOrderMapper iOrderMapper;
 
 
                         @Override
-                        public User save(User user) {
-                            return userMapper.toUser(iUserCrudRepository.save(userMapper.toUserEntity(user)));
+                        public Order save(Order order) {
+                            OrderEntity orderEntity = iOrderMapper.toOrderEntity(order);
+
+                            orderEntity.getOrderProducts().forEach(
+                                    orderProductEntity -> orderProductEntity.setOrderEntity(orderEntity)
+                            );
+                            return iOrderMapper.toOrder(iOrderCrudRepository.save(orderEntity));
                         }
 
                         @Override
-                        public Iterable<User> findAll(){
-                            return userMapper.toUsers(iUserCrudRepository.findAll());
-                        }
-
-                        @Override
-                        public User findByEmail(String email) {
-                            return userMapper.toUser(iUserCrudRepository.findByEmail(email).orElseThrow(
-                                    ()-> new  RuntimeException("El usuario con email :"+email+" no ha sido encontrado.")
+                        public Order findById(Integer id) {
+                            return iOrderMapper.toOrder(iOrderCrudRepository.findById(id).orElseThrow(
+                                    () -> new RuntimeException("Orden con ID: " + id + " no encontrada.")
                             ));
                         }
 
                         @Override
-                        public User findById(Integer id) {
-                            return userMapper.toUser(iUserCrudRepository.findById(id).get());
+                        public Iterable<Order> findAll() {
+                            return iOrderMapper.toOrderList(iOrderCrudRepository.findAll());
                         }
 
                         @Override
-                        public void deleteById(Integer id) {
-                            iUserCrudRepository.findById(id).orElseThrow(
-                                    ()-> new RuntimeException("Usuario con id: " + id + " no existe")
-                            );
-                            iUserCrudRepository.deleteById(id);
+                        public Iterable<Order> findByUserId(Integer userId) {
+                            UserEntity userEntity = new UserEntity();
+                            userEntity.setId(userId);
+                            return iOrderMapper.toOrderList(iOrderCrudRepository.findByUserEntity(userEntity));
+                        }
+
+                        @Override
+                        public void updateStateById(Integer id, String state) {
+                            if (state.equals(OrderState.CANCELLED)){
+                                iOrderCrudRepository.updateStateById(id, OrderState.CANCELLED);
+                            }else {
+                                iOrderCrudRepository.updateStateById(id, OrderState.CONFIRMED);
+                            }
                         }
                     }
+
             * > config
                 * - BeanConfiguration.java:
                     package com.harmonydealer.ecommerce.backend.infrastructure.config;
@@ -252,7 +293,7 @@ Backend
                     }
 
             * > entity
-                * - UserEntity.java:
+                * - OrderEntity.java:
                     package com.harmonydealer.ecommerce.backend.infrastructure.entity;
 
                     import com.harmonydealer.ecommerce.backend.domain.model.OrderState;
@@ -282,80 +323,130 @@ Backend
                         private List<OrderProductEntity> orderProducts;
                     }
 
+                * - OrderProductEntity.java:
+                    package com.harmonydealer.ecommerce.backend.infrastructure.entity;
+
+                    import jakarta.persistence.*;
+                    import lombok.Data;
+
+                    import java.math.BigDecimal;
+
+                    @Data
+                    @Entity
+                    @Table(name = "order_products")
+                    public class OrderProductEntity {
+
+                        @Id
+                        @GeneratedValue(strategy = GenerationType.IDENTITY)
+                        private Integer id;
+                        private BigDecimal quantity;
+                        private BigDecimal price;
+                        private Integer productId;
+                        @ManyToOne
+                        private OrderEntity orderEntity;
+                    }
+
             * > mapper
-                * - UserMapper.java:
+                * - IOrderMapper:
                     package com.harmonydealer.ecommerce.backend.infrastructure.mapper;
 
-                    import com.harmonydealer.ecommerce.backend.domain.model.User;
-                    import com.harmonydealer.ecommerce.backend.infrastructure.entity.UserEntity;
+                    import com.harmonydealer.ecommerce.backend.domain.model.Order;
+                    import com.harmonydealer.ecommerce.backend.infrastructure.entity.OrderEntity;
+                    import org.mapstruct.InheritInverseConfiguration;
+                    import org.mapstruct.Mapper;
+                    import org.mapstruct.Mapping;
+                    import org.mapstruct.Mappings;
+
+                    @Mapper(componentModel = "spring", uses = {IOrderProductMapper.class})
+                    public interface IOrderMapper {
+
+                        @Mappings(
+                                {
+                                        @Mapping(source = "id", target = "id"),
+                                        @Mapping(source = "dateCreated", target = "dateCreated"),
+                                        @Mapping(source = "orderProducts", target = "orderProducts"),
+                                        @Mapping(source = "orderState", target = "orderState"),
+                                        @Mapping(source = "userEntity.id", target = "userId")
+                                }
+                        )
+                        Order toOrder(OrderEntity orderEntity);
+                        Iterable<Order> toOrderList(Iterable<OrderEntity> orderEntities);
+
+                        @InheritInverseConfiguration
+                        OrderEntity toOrderEntity(Order order);
+                    }
+                * - IOrderProductMapper.java:
+                    package com.harmonydealer.ecommerce.backend.infrastructure.mapper;
+
+                    import com.harmonydealer.ecommerce.backend.domain.model.OrderProduct;
+                    import com.harmonydealer.ecommerce.backend.infrastructure.entity.OrderProductEntity;
                     import org.mapstruct.InheritInverseConfiguration;
                     import org.mapstruct.Mapper;
                     import org.mapstruct.Mapping;
                     import org.mapstruct.Mappings;
 
                     @Mapper(componentModel = "spring")
-                    public interface UserMapper {
+                    public interface IOrderProductMapper {
                         @Mappings(
                                 {
                                         @Mapping(source = "id", target = "id"),
-                                        @Mapping(source = "username", target = "username"),
-                                        @Mapping(source = "firstName", target = "firstName"),
-                                        @Mapping(source = "lastName", target = "lastName"),
-                                        @Mapping(source = "email", target = "email"),
-                                        @Mapping(source = "address", target = "address"),
-                                        @Mapping(source = "cellphone", target = "cellphone"),
-                                        @Mapping(source = "password", target = "password"),
-                                        @Mapping(source = "userType", target = "userType"),
-                                        @Mapping(source = "dateCreated", target = "dateCreated"),
-                                        @Mapping(source = "dateUpdated", target = "dateUpdated")
+                                        @Mapping(source = "quantity", target = "quantity"),
+                                        @Mapping(source = "price", target = "price"),
+                                        @Mapping(source = "productId", target = "productId")
                                 }
                         )
-                        User toUser(UserEntity userEntity);
-                        Iterable<User> toUsers(Iterable<UserEntity> userEntities);
+                        OrderProduct toOrderProduct(OrderProductEntity orderProductEntity);
+                        Iterable<OrderProduct> toOrderProductList(Iterable<OrderProductEntity> orderProductEntities);
 
                         @InheritInverseConfiguration
-                        UserEntity toUserEntity(User user);
+                        OrderProductEntity toOrderProductEntity(OrderProduct orderProduct);
                     }
 
             * > rest
-                * - UserController.java:
+                * - OrderController.java:
                     package com.harmonydealer.ecommerce.backend.infrastructure.rest;
 
-                    import com.harmonydealer.ecommerce.backend.application.UserService;
-                    import com.harmonydealer.ecommerce.backend.domain.model.User;
-                    import org.springframework.http.HttpStatus;
+
+                    import com.harmonydealer.ecommerce.backend.application.OrderService;
+                    import com.harmonydealer.ecommerce.backend.domain.model.Order;
+                    import com.harmonydealer.ecommerce.backend.domain.model.OrderState;
+                    import lombok.AllArgsConstructor;
+                    import lombok.extern.slf4j.Slf4j;
                     import org.springframework.http.ResponseEntity;
                     import org.springframework.web.bind.annotation.*;
 
                     @RestController
-                    @RequestMapping("/api/v1/users")
+                    @RequestMapping("/api/v1/admin/orders")
+                    @Slf4j
+                    @AllArgsConstructor
                     @CrossOrigin(origins = "http://localhost:4200")
-                    public class UserController {
-                        private final UserService userService;
-
-                        public UserController(UserService userService) {
-                            this.userService = userService;
-                        }
+                    public class AdminOrderController {
+                        private final OrderService orderService;
 
                         @PostMapping
-                        public User save(@RequestBody User user){
-                            return userService.save(user);
+                        public ResponseEntity<Order> save(@RequestBody Order order){
+                            if (order.getOrderState().toString().equals(OrderState.CANCELLED.toString())){
+                                order.setOrderState(OrderState.CANCELLED);
+                            }else {
+                                order.setOrderState(OrderState.CONFIRMED);
+                            }
+
+                            return ResponseEntity.ok(orderService.save(order));
                         }
 
                         @GetMapping
-                        public ResponseEntity<Iterable<User>> findAll(){
-                            return ResponseEntity.ok(userService.findAll());
+                        public ResponseEntity<Iterable<Order>> findAll(){
+                            return ResponseEntity.ok(orderService.findAll());
                         }
 
-                        @GetMapping("/{id}")
-                        public User findById(@PathVariable Integer id){
-                            return userService.findById(id);
+                        @GetMapping("/{variable}")
+                        public ResponseEntity<Order> findById(@PathVariable("variable") Integer id){
+                            return ResponseEntity.ok(orderService.findById(id));
                         }
 
-                        @DeleteMapping("/{id}")
-                        public ResponseEntity<HttpStatus> deleteById(@PathVariable Integer id){
-                            userService.deleteById(id);
-                            return ResponseEntity.ok().build();
+                        @GetMapping("/by-user/{id}")
+                        public ResponseEntity<Iterable<Order>> findByUserId(@PathVariable("id") Integer userId){
+                            return ResponseEntity.ok(orderService.findByUserId(userId));
                         }
                     }
 
@@ -455,3 +546,134 @@ Frontend
 
 "gon.m@test.com"
 "Test.1234"
+
+Este es mi código:
+
+admin-analytics.component:
+html: 
+<div class="container">
+    <h2>Ventas por Día, Mes y Año</h2>
+    <canvas id="salesChart"></canvas>
+  
+    <h2>Productos Más Vendidos</h2>
+    <canvas id="topProductsChart"></canvas>
+  </div>
+ts:
+import { Component, OnInit } from '@angular/core';
+import { Chart } from 'chart.js';
+import { AnalitycsService } from 'src/app/services/analitycs.service';
+
+@Component({
+  selector: 'app-admin-analytics',
+  templateUrl: './admin-analytics.component.html',
+  styleUrls: ['./admin-analytics.component.css']
+})
+export class AdminAnalyticsComponent implements OnInit {
+
+  constructor(private analitycsService: AnalitycsService ) {}
+  ngOnInit(): void {
+    
+  }
+
+  loadSalesData() {
+    this.analitycsService.getSalesByDay().subscribe((data: any[]) => {
+      const labels = data.map(sale => sale[0]);
+      const salesData = data.map(sale => sale[1]);
+
+      new Chart("salesChart", {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Ventas por Día',
+            data: salesData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1,
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+  }
+
+  loadTopProductsData() {
+    this.analitycsService.getTopSellingProducts().subscribe((data: any[]) => {
+      const labels = data.map(product => `Producto ${product[0]}`);
+      const quantities = data.map(product => product[1]);
+
+      new Chart("topProductsChart", {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Productos más vendidos',
+            data: quantities,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      }
+
+      )
+    }
+
+    )
+  }
+
+}
+analitycsService(orderService lo estoy utilizando para otra función):
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/internal/Observable';
+import { HeaderService } from './header.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AnalitycsService {
+
+  private apiUrl : string = "http://localhost:8085/api/v1/admin/analytics";
+  constructor(private httpClient: HttpClient, private headerService : HeaderService) { }
+
+  getSalesByDay(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.apiUrl}/sales/day`, {headers:this.headerService.headers});
+  }
+
+  getSalesByMonth(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.apiUrl}/sales/month`, {headers:this.headerService.headers});
+  }
+
+  getSalesByYear(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.apiUrl}/sales/year`, {headers:this.headerService.headers});
+  }
+
+  getTopSellingProducts(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${this.apiUrl}/top-products`, {headers:this.headerService.headers});
+  }
+}

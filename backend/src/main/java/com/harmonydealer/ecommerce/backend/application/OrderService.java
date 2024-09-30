@@ -4,6 +4,8 @@ import com.harmonydealer.ecommerce.backend.domain.model.Order;
 import com.harmonydealer.ecommerce.backend.domain.port.IOrderRepository;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 public class OrderService {
 
@@ -23,5 +25,21 @@ public class OrderService {
     }
     public void updateStateById(Integer id, String state){
         this.iOrderRepository.updateStateById(id, state);
+    }
+
+    public List<Object[]> getSalesByDay() {
+        return iOrderRepository.getSalesByDay();
+    }
+
+    public List<Object[]> getSalesByMonth() {
+        return iOrderRepository.getSalesByMonth();
+    }
+
+    public List<Object[]> getSalesByYear() {
+        return iOrderRepository.getSalesByYear();
+    }
+
+    public List<Object[]> getTopSellingProducts() {
+        return iOrderRepository.getTopSellingProducts();
     }
 }

@@ -1,7 +1,7 @@
-<app-header-admin></app-header-admin>
+<app-header></app-header>
 
 <div class="container">
-    <h2>Pedidos del Usuario {{ userId }}</h2>
+    <h2>Pedidos del Usuario {{ username }}</h2>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -21,6 +21,9 @@
         </tr>
       </tbody>
     </table>
+    <button class="btn btn-primary mb-3" [routerLink]="['/admin/users']">
+      Volver a la lista de usuarios
+    </button>
   </div>
 
   <app-footer></app-footer>

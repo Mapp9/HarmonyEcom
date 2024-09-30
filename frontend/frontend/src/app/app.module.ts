@@ -29,6 +29,8 @@ import { UserListComponent } from './components/admin/user-list/user-list.compon
 import { UserEditComponent } from './components/admin/user-edit/user-edit.component';
 import { UserOrdersComponent } from './components/admin/user-orders/user-orders.component';
 import { AdminOrderDetailsComponent } from './components/admin/admin-order-details/admin-order-details.component';
+import { AdminAnalyticsComponent } from './components/admin/admin-analytics/admin-analytics.component';
+import { HeaderComponent } from './components/header/header.component';
 
 const routes : Routes = [
   {path: '', component: HomeComponent},
@@ -50,7 +52,8 @@ const routes : Routes = [
   {path: 'admin/users', component: UserListComponent},
   {path: 'admin/edit-user/:id', component: UserEditComponent},
   {path: 'admin/users/:id/orders', component:UserOrdersComponent },
-  {path: 'orders/admin/detail/:id', component: AdminOrderDetailsComponent}
+  {path: 'orders/admin/detail/:id', component: AdminOrderDetailsComponent},
+  {path: 'admin/analytics', component: AdminAnalyticsComponent}
 
 
 ];
@@ -78,7 +81,9 @@ const routes : Routes = [
     UserListComponent,
     UserEditComponent,
     UserOrdersComponent,
-    AdminOrderDetailsComponent
+    AdminOrderDetailsComponent,
+    AdminAnalyticsComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

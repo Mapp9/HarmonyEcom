@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand p-2" [routerLink]="['/']">
+        <img src="/assets/logo.png" alt="Avatar Logo" style="width: 60px;" class="rounded-pill me-auto">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link text-light" [routerLink]="['/']">HARMONY DEALER</a>
+          </li>
+        </ul>
+  
+        <!-- Condiciones para ADMIN -->
+        <ul class="navbar-nav ms-auto" *ngIf="isAdmin">
+          <li class="nav-item dropdown dropstart">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              ADMIN
+            </a>
+            
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" routerLink="/admin/category">Categorias</a></li>
+              <li><a class="dropdown-item" routerLink="/admin/product">Productos</a></li>
+              <li><a class="dropdown-item" routerLink="/admin/users">Usuarios</a></li>
+              <li><a class="dropdown-item" routerLink="/admin/analytics">Analítica</a></li>
+              <li><a class="dropdown-item" routerLink="/logout">Salir</a></li>
+            </ul>
+          </li>
+        </ul>
+  
+        <!-- Condiciones para USER -->
+        <ul class="navbar-nav ms-auto" *ngIf="isUser">
+          <li class="nav-item"><a class="nav-link" [routerLink]="['/cart/sumary']">Carrito</a></li>
+          <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link" [routerLink]="['/user/orders']">Pedidos</a></li>
+          <li class="nav-item" *ngIf="!isAuthenticated"><a class="nav-link" [routerLink]="['/user/login']">Login</a></li>
+          <li class="nav-item" *ngIf="!isAuthenticated"><a class="nav-link" [routerLink]="['/user/register']">Registro</a></li>
+          <li class="nav-item" *ngIf="isAuthenticated"><a class="nav-link" routerLink="/logout">Salir</a></li>
+        </ul>
+
+        <ul class="navbar-nav ms-auto" *ngIf="!isAuthenticated">
+          <li class="nav-item"><a class="nav-link" [routerLink]="['/cart/sumary']">Carrito</a></li>
+          <li class="nav-item" ><a class="nav-link" [routerLink]="['/user/login']">Login</a></li>
+          <li class="nav-item" ><a class="nav-link" [routerLink]="['/user/register']">Registro</a></li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
