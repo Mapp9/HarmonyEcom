@@ -28,6 +28,7 @@ import { OrderDetailsComponent } from './components/orders/order-details/order-d
 import { UserListComponent } from './components/admin/user-list/user-list.component';
 import { UserEditComponent } from './components/admin/user-edit/user-edit.component';
 import { UserOrdersComponent } from './components/admin/user-orders/user-orders.component';
+import { AdminOrderDetailsComponent } from './components/admin/admin-order-details/admin-order-details.component';
 
 const routes : Routes = [
   {path: '', component: HomeComponent},
@@ -47,7 +48,9 @@ const routes : Routes = [
   {path: 'user/orders', component: OrderHistoryComponent, canActivate: [authGuard]},
   {path: 'orders/detail/:id', component: OrderDetailsComponent},
   {path: 'admin/users', component: UserListComponent},
-  {path: 'admin/edit-user/:id', component: UserEditComponent}
+  {path: 'admin/edit-user/:id', component: UserEditComponent},
+  {path: 'admin/users/:id/orders', component:UserOrdersComponent },
+  {path: 'orders/admin/detail/:id', component: AdminOrderDetailsComponent}
 
 
 ];
@@ -74,7 +77,8 @@ const routes : Routes = [
     OrderDetailsComponent,
     UserListComponent,
     UserEditComponent,
-    UserOrdersComponent
+    UserOrdersComponent,
+    AdminOrderDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -2,21 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderProduct } from 'src/app/common/order-product';
 import { Product } from 'src/app/common/product';
-import { OrderService } from 'src/app/services/order.service';
+import { AdminOrderService } from 'src/app/services/admin-order.service';
+import { HomeService } from 'src/app/services/home.service';
 import { UserService } from 'src/app/services/user.service';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { HomeService } from 'src/app/services/home.service';
-import { SessionStorageService } from 'src/app/services/session-storage.service';
 
 @Component({
-  selector: 'app-order-details',
-  templateUrl: './order-details.component.html',
-  styleUrls: ['./order-details.component.css']
+  selector: 'app-admin-order-details',
+  templateUrl: './admin-order-details.component.html',
+  styleUrls: ['./admin-order-details.component.css']
 })
-export class OrderDetailsComponent implements OnInit {
-
+export class AdminOrderDetailsComponent implements OnInit {
   orderId: number|null = 0;
   orderState: string = '';
   orderProducts: OrderProduct [] = [];
@@ -26,23 +24,21 @@ export class OrderDetailsComponent implements OnInit {
   firstName : string = '';
   lastName : string = '';
   email : string = '';
-  address : string = '';
-  role: string = '';
+  address : string = ''; 
   pageTitle: string = 'Detalles de la orden'
+
+  ngOnInit(): void {
+    
+  }
 
   constructor(
     private userService:UserService,
-    private orderService:OrderService,
+    private orderService:AdminOrderService,
     private productService: HomeService,
     private route: ActivatedRoute,
-    private router: Router,
-    private sessionStorage: SessionStorageService
+    private router: Router
   )
   {}
-  
-  ngOnInit(): void {
-    this.getOrderById();
-  }
 
   getOrderById() {
     console.log(this.orderId)
@@ -127,16 +123,6 @@ export class OrderDetailsComponent implements OnInit {
   }
 
   goBackToOrderList(): void {
-    const user = this.sessionStorage.getItem('token')
-    if(user && user.type) {
-      this.role = user.type;
-      this.role === 'ADMIN';
-      this.router.navigate(['/admin/users']);
-    }else{
-      this.router.navigate(['/orders/history']);
-    }
-    
+    this.router.navigate(['admin/users/:id/orders']);
   }
-
-
 }
