@@ -27,21 +27,21 @@ export class AuthenticationService {
   }
 
   getToken(): string | null {
-    return sessionStorage.getItem('token'); // O sessionStorage.getItem('token'), dependiendo de dónde lo guardes
+    return sessionStorage.getItem('token'); 
   }
   decodeToken(token: string): JwtPayload | null {
     try {
-      return jwtDecode<JwtPayload>(token); // Usamos la función jwtDecode
+      return jwtDecode<JwtPayload>(token); 
     } catch (Error) {
       return null;
     }
   }
   getUserRole(): string {
-    const tokenData = this.getToken(); // Obtener el token u objeto completo
+    const tokenData = this.getToken(); 
     if (tokenData) {
-      // Suponiendo que el tokenData es un objeto con el campo 'type'
-      const parsedToken = JSON.parse(tokenData); // Parseamos si es un string con formato JSON
-      return parsedToken.type || ''; // Devolver el rol del usuario
+      
+      const parsedToken = JSON.parse(tokenData); 
+      return parsedToken.type || '';
     }
     return '';
   }

@@ -31,7 +31,7 @@ export class UserEditComponent implements OnInit {
     if (id) {
       this.isEditMode = true;
 
-      this.id = +id; // Convertir el id a número
+      this.id = +id;
       this.adminUserService.getUserById(this.id).subscribe((data) => {
         this.username = data.username;
         this.name = data.firstName;

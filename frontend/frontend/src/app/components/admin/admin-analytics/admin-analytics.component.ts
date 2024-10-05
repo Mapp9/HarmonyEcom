@@ -49,15 +49,15 @@ export class AdminAnalyticsComponent implements OnInit {
 
   loadTopProductsData() {
     this.analitycsService.getTopSellingProducts().subscribe((data: any[]) => {
-      const labels = data.map(product => product[0]); // Aquí usas el nombre del producto
-      const quantities = data.map(product => product[1]); // Aquí usas la cantidad vendida
+      const labels = data.map(product => product[0]); 
+      const quantities = data.map(product => product[1]);
   
       const topProductsChartElement = document.getElementById('topProductsChart') as HTMLCanvasElement;
       if (topProductsChartElement) {
         new Chart(topProductsChartElement, {
           type: 'pie',
           data: {
-            labels: labels, // Ahora los nombres de los productos se mostrarán como etiquetas
+            labels: labels,
             datasets: [{
               label: 'Productos más vendidos',
               data: quantities,

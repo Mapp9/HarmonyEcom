@@ -14,18 +14,18 @@ import autoTable from 'jspdf-autotable';
 export class TicketComponent implements OnInit {
 
   order: any;
-  orderId: number = 0; // Variable para almacenar el ID de la orden
+  orderId: number = 0; 
   productDetails: any[] = [];
   userDetails: any = null;
 
   constructor(private sessionStorage: SessionStorageService, private orderService:OrderService, private homeService:HomeService,private userService:UserService) { }
 
   ngOnInit(): void {
-    // Recuperar el objeto de la orden del SessionStorage
+    
     const order = this.sessionStorage.getItem('order');
     
     if (order && order.id) {
-      this.orderId = order.id;  // Acceder directamente al ID
+      this.orderId = order.id;  
       console.log('Order ID:', this.orderId);
       this.loadOrderById(this.orderId);
     } else {
@@ -98,14 +98,12 @@ export class TicketComponent implements OnInit {
       (orderProduct.quantity * orderProduct.price).toFixed(2)
     ]);
 
-    // Añadir tabla de productos
     autoTable(doc, {
       head: [['#', 'Producto', 'Cantidad', 'Precio Unitario', 'Total']],
       body: products,
       startY: 120,
     });
 
-    // Guardar el PDF
     doc.save('detalles-orden.pdf');
   }
 
